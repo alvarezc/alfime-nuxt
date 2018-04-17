@@ -1,7 +1,7 @@
 import axios from 'axios'
-import {extractEmbedded} from './helpers'
+import { extractEmbedded, prefix } from './helpers'
 
-const prefix = 'http://localhost:8090/api'
+console.log(prefix)
 
 export default {
   async barrios (departamentoId) {
@@ -29,9 +29,9 @@ export default {
   },
 
   async documentoTipos () {
-    const {data} = await axios.get(`${prefix}/tipo-documento`)
+    const {data} = await axios.get(`${prefix}/tipoDocumento`)
 
-    return extractEmbedded('tipos-documento', data)
+    return extractEmbedded('tiposDocumento', data)
   },
 
   async escolaridades () {

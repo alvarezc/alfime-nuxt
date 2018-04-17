@@ -46,7 +46,8 @@
             </v-btn>
             <v-toolbar-title v-text="title"></v-toolbar-title>
             <v-spacer></v-spacer>
-            <v-text-field label="Identificación..." hide-details v-model="cedula" single-line append-icon="search" :append-icon-cb="search"></v-text-field>
+            <v-text-field label="Identificación..." hide-details v-model="cedula" single-line append-icon="search"
+                          :append-icon-cb="search"></v-text-field>
             <v-spacer></v-spacer>
             <v-btn
                     icon
@@ -80,6 +81,8 @@
 </template>
 
 <script>
+  import usuarioService from '~/services/usuario'
+
   export default {
     data () {
       return {
@@ -100,8 +103,10 @@
     },
 
     methods: {
-      search () {
-        window.alert(this.cedula)
+      async search () {
+        const usuario = await usuarioService.find(this.cedula)
+
+        this.$nuxt.$router.push(`/usuario/${usuario.id}`)
       }
     }
   }

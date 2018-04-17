@@ -2,28 +2,28 @@
     <v-container>
         <v-layout row>
             <v-flex>
-                <v-text-field label="Nombre"></v-text-field>
+                <v-text-field v-model="modelo.nombre" label="Nombre"></v-text-field>
             </v-flex>
             <v-flex class="ml-2">
-                <v-text-field label="Segundo Nombre"></v-text-field>
+                <v-text-field v-model="modelo.segundoNombre" label="Segundo Nombre"></v-text-field>
             </v-flex>
         </v-layout>
         <v-layout row>
             <v-flex class="mr-2">
-                <v-text-field label="Apellido Paterno"></v-text-field>
+                <v-text-field v-model="modelo.apellidoPaterno" label="Apellido Paterno"></v-text-field>
             </v-flex>
             <v-flex>
-                <v-text-field label="Apellido Materno"></v-text-field>
+                <v-text-field v-model="modelo.apellidoMaterno" label="Apellido Materno"></v-text-field>
             </v-flex>
         </v-layout>
 
-        <identificacion v-model="identificacion" :tipos="documentoTipos"></identificacion>
+        <identificacion v-model="modelo.identificacion" :tipos="documentoTipos"></identificacion>
 
         <v-select label="Genero"
-                  :items="generos"
+                  :items="generos" v-model="modelo.genero"
                   item-text="genero" item-value="id"></v-select>
 
-        <calendar label="Fecha de Nacimiento" v-model="date" :max="today"></calendar>
+        <calendar label="Fecha de Nacimiento" v-model="modelo.nacimiento" :max="today"></calendar>
 
         <v-layout row wrap>
             <v-flex xs6>
@@ -33,12 +33,13 @@
             </v-flex>
 
             <v-flex xs6>
-                <v-select v-model="ciudad" label="Ciudad de Nacimiento"
+                <v-select v-model="modelo.ciudad" label="Ciudad de Nacimiento"
                           :items="ciudades" autocomplete
                           item-text="ciudad" item-value="id"></v-select>
             </v-flex>
         </v-layout>
 
+        <v-btn @click="guarda()">Guardar</v-btn>
     </v-container>
 </template>
 
@@ -47,6 +48,7 @@
   import lookup from '~/services/lookup'
   import calendar from '~/components/calendar'
   import identificacion from '~/components/identificacion'
+  import axios from 'axios'
 
   export default {
     name: 'index',
@@ -73,16 +75,42 @@
     data: () => ({
       today: moment().format('YYYY-MM-DD'),
       departamento: 5, // Antioquia
-      ciudad: 47, // Envigado
       date: moment().format('YYYY-MM-DD'),
       menu: false,
-      identificacion: {tipoId: null, numero: ''}
+      modelo: {
+        nombre: '',
+        segundoNombre: '',
+        apellidoPaterno: '',
+        apellidoMaterno: '',
+        nacimiento: '',
+        ciudad: 47, // Envigado
+        genero: null,
+        identificacion: {tipoId: null, numero: ''}
+      }
     }),
 
     methods: {
       async cargaCiudades (departamentoId) {
         this.ciudades = await lookup.ciudades(departamentoId)
         this.ciudad = this.ciudades[0].id
+      },
+
+      async guarda () {
+        const {identificacion, ...usuario} = this.modelo
+
+        const {data} = await axios
+          .post(
+            'http://localhost:8090/api/usuario',
+            {
+              ...usuario,
+              documento: identificacion.numero,
+              genero: `http://localhost:8090/api/genero/${usuario.genero}`,
+              tipoDocumento: `http://localhost:8090/api/tipoDocumento/${identificacion.tipoId}`,
+              ciudad: `http://localhost:8090/api/ciudad/${usuario.ciudad}`,
+              nacimiento: moment(usuario.nacimiento).toISOString()
+            })
+
+        this.$nuxt.$router.push(`/usuario/${data.id}`)
       }
     },
 
