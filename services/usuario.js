@@ -1,6 +1,7 @@
 import axios from 'axios'
-import { prefix, extractLinks, extractEmbedded } from './helpers'
+import { prefix, extractLinks, extractEmbedded, fetchLinks } from './helpers'
 import moment from 'moment/moment'
+import traverson from './traverson'
 
 export default {
   async read (id) {
@@ -47,5 +48,21 @@ export default {
         aspiracion: [],
         remitente: 1
       }
+  },
+
+  async evaluacionFamilia (usuarioId) {
+    const evaluacion = await traverson
+      .from(`${prefix}/usuario/${usuarioId}/evaluaciones`)
+      .jsonHal()
+      .follow('evaluaciones', 'familia')
+      .getResource()
+      .result
+    // (await axios.get(`${prefix}/usuario/${usuarioId}/evaluaciones`)).data
+    // const links = evaluacion._embedded.evaluaciones.length && evaluacion._embedded.evaluaciones[0]._links
+    // const {data} = await axios.get(links.familia.href)
+
+    console.log(evaluacion)
+
+    return fetchLinks(evaluacion, 'familiaTipo', 'padreDocumento', 'madreDocumento')
   }
 }

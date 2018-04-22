@@ -90,10 +90,10 @@
         drawer: true,
         fixed: false,
         items: [
-          {icon: 'apps', title: 'Welcome', to: '/'},
+          {icon: 'apps', title: 'Bienvenidos', to: '/'},
           {icon: 'bubble_chart', title: 'Inspire', to: '/inspire'},
-          {icon: 'apps', title: 'Medico', to: '/usuario/medico'},
-          {icon: 'perm_identity\n', title: 'Administración', to: '/admin'}
+          {icon: 'perm_identity', title: 'Usuario', to: '/usuario'},
+          {icon: 'widgets', title: 'Administración', to: '/admin'}
         ],
         miniVariant: false,
         right: true,

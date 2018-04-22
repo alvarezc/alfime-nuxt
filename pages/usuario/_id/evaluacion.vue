@@ -19,10 +19,6 @@
         <lookup :items="evaluadores" v-model="evaluacion.evaluador" label="Evaluador"></lookup>
 
         <v-btn @click="guarda()">Guardar</v-btn>
-
-        <v-layout>
-            {{evaluacion}}
-        </v-layout>
     </v-container>
 </template>
 
