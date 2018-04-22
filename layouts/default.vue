@@ -92,7 +92,8 @@
         items: [
           {icon: 'apps', title: 'Welcome', to: '/'},
           {icon: 'bubble_chart', title: 'Inspire', to: '/inspire'},
-          {icon: 'apps', title: 'Medico', to: '/usuario/medico'}
+          {icon: 'apps', title: 'Medico', to: '/usuario/medico'},
+          {icon: 'perm_identity\n', title: 'Administración', to: '/admin'}
         ],
         miniVariant: false,
         right: true,

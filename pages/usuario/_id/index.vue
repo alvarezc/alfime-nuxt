@@ -12,6 +12,9 @@
         <v-layout>
             {{usuario.ciudad.ciudad}}, {{usuario.ciudad.departamento.departamento}}
         </v-layout>
+        <v-layout column>
+            <v-btn router :to="`/usuario/${$route.params.id}/evaluacion`">Evaluacion</v-btn>
+        </v-layout>
     </v-container>
 </template>
 

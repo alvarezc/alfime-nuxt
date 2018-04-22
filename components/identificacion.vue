@@ -2,8 +2,8 @@
     <v-layout row wrap>
         <v-flex class="mr-1" xs12 sm5 md4 lg3>
             <v-select label="Tipo de Documento"
-                      :items="tipos" autocomplete
-                      item-text="tipo" item-value="id"
+                      :items="tipos" autocomplete return-object
+                      item-text="nombre" item-value="id"
                       v-model="tipoId"></v-select>
         </v-flex>
 

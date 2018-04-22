@@ -1,7 +1,7 @@
 <template>
     <v-container>
-        <v-select :items="familiaTipos" required
-                  label="Tipo de Familia" item-text="nombre" item-value="id" v-model="model.familiaTipo"></v-select>
+        <lookup :items="familiaTipos" required
+                label="Tipo de Familia" v-model="model.familiaTipo"></lookup>
         <v-text-field label="Calidad de las Relaciones Familiares" v-model="model.calidadRelaciones"
                       maxlength="255" required></v-text-field>
         <h3>Información del Padre</h3>
@@ -28,9 +28,8 @@
                     <v-container grid-list-md>
                         <v-layout wrap>
                             <v-flex xs12>
-                                <v-select :items="parentescos" required return-object
-                                          label="Parentesco" item-text="nombre" item-value="id"
-                                          v-model="editedItem.parentesco"></v-select>
+                                <lookup :items="parentescos" required label="Parentesco"
+                                        v-model="editedItem.parentesco"></lookup>
                             </v-flex>
 
                             <v-flex xs12>
@@ -39,9 +38,8 @@
                             </v-flex>
 
                             <v-flex xs12>
-                                <v-select :items="responsabilidades" required return-object
-                                          label="Responsabilidad" item-text="nombre" item-value="id"
-                                          v-model="editedItem.responsabilidad"></v-select>
+                                <lookup :items="responsabilidades" required label="Responsabilidad"
+                                        v-model="editedItem.responsabilidad"></lookup>
                             </v-flex>
                         </v-layout>
                     </v-container>
@@ -86,21 +84,23 @@
 </template>
 
 <script>
-  import lookup from '~/services/lookup'
+  import lookupService from '~/services/lookup'
   import identificacion from '~/components/identificacion'
+  import lookup from '~/components/lookup'
 
   export default {
     name: 'familiar',
 
     components: {
-      identificacion
+      identificacion,
+      lookup
     },
 
     async asyncData () {
-      const documentoTipos = await lookup.documentoTipos()
-      const familiaTipos = await lookup.familiaTipos()
-      const parentescos = await lookup.parentescos()
-      const responsabilidades = await lookup.responsabilidades()
+      const documentoTipos = await lookupService.documentoTipos()
+      const familiaTipos = await lookupService.familiaTipos()
+      const parentescos = await lookupService.parentescos()
+      const responsabilidades = await lookupService.responsabilidades()
 
       return {
         familiaTipos,

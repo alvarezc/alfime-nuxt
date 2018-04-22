@@ -9,29 +9,6 @@
             <v-spacer></v-spacer>
             <v-flex xs11 sm5>
                 <calendar v-model="date" label="Fecha de Adquisición" :max="today"></calendar>
-                <!--<v-menu-->
-                        <!--ref="menu"-->
-                        <!--lazy-->
-                        <!--:close-on-content-click="false"-->
-                        <!--v-model="menu"-->
-                        <!--transition="scale-transition"-->
-                        <!--offset-y-->
-                        <!--full-width-->
-                        <!--:nudge-right="40"-->
-                        <!--min-width="290px"-->
-                        <!--:return-value.sync="date">-->
-                    <!--<v-text-field-->
-                            <!--slot="activator"-->
-                            <!--label="Fecha de Adquisición"-->
-                            <!--v-model="date"-->
-                            <!--prepend-icon="event"-->
-                            <!--readonly></v-text-field>-->
-                    <!--<v-date-picker v-model="date" no-title scrollable locale="es-co" :max="today">-->
-                        <!--<v-spacer></v-spacer>-->
-                        <!--<v-btn flat color="primary" @click="menu = false">Cancel</v-btn>-->
-                        <!--<v-btn flat color="primary" @click="$refs.menu.save(date)">OK</v-btn>-->
-                    <!--</v-date-picker>-->
-                <!--</v-menu>-->
             </v-flex>
             <v-flex xs12>
                 <v-data-table
@@ -78,6 +55,7 @@
 
       return {discapacidades}
     },
+
     data: () => ({
       today: moment().format('YYYY-MM-DD'),
       date: moment().format('YYYY-MM-DD'),
@@ -118,7 +96,6 @@
     methods: {
       initialize () {
         this.items = [
-
           {
             discapacidad: 'Física',
             origen: 'Congénita',

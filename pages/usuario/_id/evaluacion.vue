@@ -1,42 +1,87 @@
 <template>
     <v-container>
-        <v-select :items="programas" chips multiple
-                  label="Programas que Aspira Ingresar" item-text="nombre" item-value="id"></v-select>
+        <usuario :usuario="evaluacion.usuario"></usuario>
 
-        <v-select :items="remitentes"
-                  label="Remitente" item-text="nombre" item-value="id"></v-select>
+        <lookup :items="programas" chips multiple label="Programas que Aspira Ingresar"
+                v-model="evaluacion.aspiracion"></lookup>
 
-        <v-text-field label="Observaciones" multi-line></v-text-field>
+        <lookup :items="remitentes" label="Remitente" v-model="evaluacion.remitente"></lookup>
 
-        <v-text-field label="Conclusiones" multi-line></v-text-field>
+        <v-text-field label="Observaciones" multi-line v-model="evaluacion.observaciones"></v-text-field>
 
-        <v-select :items="programas" chips multiple
-                  label="Plan de Intervención" item-text="nombre" item-value="id"></v-select>
+        <v-text-field label="Conclusiones" multi-line v-model="evaluacion.conclusiones"></v-text-field>
 
-        <v-select :items="programas"
-                  label="Evaluador" item-text="nombre" item-value="id"></v-select>
+        <lookup :items="programas" chips multiple v-model="evaluacion.plan"
+                label="Plan de Intervención"></lookup>
+
+        <v-switch label="Aceptado" v-model="evaluacion.aceptado"></v-switch>
+
+        <lookup :items="evaluadores" v-model="evaluacion.evaluador" label="Evaluador"></lookup>
+
+        <v-btn @click="guarda()">Guardar</v-btn>
+
+        <v-layout>
+            {{evaluacion}}
+        </v-layout>
     </v-container>
 </template>
 
 <script>
-  import lookup from '~/services/lookup'
+  import lookup from '~/components/lookup'
+  import usuario from '~/components/usuario'
+  import lookupService from '~/services/lookup'
+  import usuarioService from '~/services/usuario'
+  import evaluacionService from '~/services/evaluacion'
 
   export default {
     name: 'evaluacion',
 
-    async asyncData () {
-      const programas = await lookup.programas()
-      const remitentes = await lookup.remitentes()
+    components: {
+      lookup,
+      usuario
+    },
+
+    async asyncData ({params}) {
+      const programas = await lookupService.programas()
+      const remitentes = await lookupService.remitentes()
+      const evaluadores = await lookupService.evaluadores()
+      const evaluacion = await usuarioService.evaluacion(params.id)
 
       return {
         programas,
-        remitentes
+        remitentes,
+        evaluacion,
+        evaluadores
       }
     },
 
     data () {
       return {
         title: 'Evaluación'
+      }
+    },
+
+    methods: {
+      async guarda () {
+        const {usuario, ...evaluacion} = this.evaluacion
+
+        const data = await evaluacionService
+          .guarda({
+            id: evaluacion.id,
+            self: evaluacion.self,
+            usuario: (usuario.self || usuario._links.self).href,
+            aspiracion: evaluacion.aspiracion.map(item => (item.self || item._links.self).href),
+            plan: evaluacion.plan.map(item => (item.self || item._links.self).href),
+            remitente: (evaluacion.remitente.self || evaluacion.remitente._links.self).href,
+            observaciones: evaluacion.observaciones,
+            conclusiones: evaluacion.conclusiones,
+            aceptado: evaluacion.aceptado,
+            evaluador: (evaluacion.evaluador.self || evaluacion.evaluador._links.self).href
+          })
+
+        console.log(data)
+
+        // this.$nuxt.$router.push(`/usuario/${evaluacion.usuario.id}`)
       }
     }
   }

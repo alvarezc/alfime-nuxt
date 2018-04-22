@@ -1,28 +1,43 @@
-
 module.exports = {
+  modules: [
+    '@nuxtjs/axios'
+  ],
+
+  axios: {
+    proxy: {
+      xfwd: true
+    } // Can be also an object with default options
+  },
+
+  proxy: {
+    '/api/': 'http://localhost:8090'
+  },
+
   /*
   ** Headers of the page
   */
   head: {
-    title: 'alfime-nuxt',
+    title: 'ALFIME - Gestión de Atención',
     meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'Proyecto de grado de ALFIME' }
+      {charset: 'utf-8'},
+      {name: 'viewport', content: 'width=device-width, initial-scale=1'},
+      {hid: 'description', name: 'description', content: 'Gestión de atención a usuarios de ALFIME'}
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' }
+      {rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'},
+      {rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons'}
     ]
   },
+
   plugins: ['~/plugins/vuetify.js'],
+
   css: [
     '~/assets/style/app.styl'
   ],
   /*
   ** Customize the progress bar color
   */
-  loading: { color: '#3B8070' },
+  loading: {color: '#3B8070'},
   /*
   ** Build configuration
   */

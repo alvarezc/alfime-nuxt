@@ -1,5 +1,6 @@
 import axios from 'axios'
-import { prefix, extractLinks } from './helpers'
+import { prefix, extractLinks, extractEmbedded } from './helpers'
+import moment from 'moment/moment'
 
 export default {
   async read (id) {
@@ -17,5 +18,34 @@ export default {
     } else {
       return null
     }
+  },
+
+  async guarda (usuario) {
+    const {data} = await axios
+      .post(
+        `${prefix}/usuario`,
+        usuario
+      )
+
+    return data
+  },
+
+  async evaluacion (usuarioId) {
+    const {data} = await axios.get(`${prefix}/usuario/${usuarioId}/evaluaciones`)
+    const evaluaciones = extractEmbedded('evaluaciones', data, true)
+
+    return evaluaciones.length
+      ? extractLinks(false, evaluaciones[0])
+      : {
+        id: -1,
+        usuario: usuarioId,
+        aceptado: false,
+        fecha: moment().format('YYYY-MM-DD'),
+        observaciones: '',
+        conclusiones: '',
+        plan: [],
+        aspiracion: [],
+        remitente: 1
+      }
   }
 }

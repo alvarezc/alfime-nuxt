@@ -14,12 +14,14 @@ export default {
     const {data} = await axios.get(`${prefix}/departamento/${departamentoId}/ciudades?size=100`)
 
     return extractEmbedded('ciudades', data)
+      .map(item => ({id: item.id, nombre: item.ciudad, self: item.self}))
   },
 
   async departamentos () {
     const {data} = await axios.get(`${prefix}/departamento?size=50`)
 
     return extractEmbedded('departamentos', data)
+      .map(item => ({id: item.id, nombre: item.departamento, self: item.self}))
   },
 
   async discapacidades () {
@@ -32,18 +34,28 @@ export default {
     const {data} = await axios.get(`${prefix}/tipoDocumento`)
 
     return extractEmbedded('tiposDocumento', data)
+      .map(item => ({id: item.id, nombre: item.tipo, self: item.self}))
   },
 
   async escolaridades () {
     const {data} = await axios.get(`${prefix}/escolaridad`)
 
     return extractEmbedded('escolaridades', data)
+      .map(item => ({id: item.id, nombre: item.escolaridad, self: item.self}))
   },
 
   async estadosCiviles () {
-    const {data} = await axios.get(`${prefix}/estado-civil`)
+    const {data} = await axios.get(`${prefix}/estadoCivil`)
 
-    return extractEmbedded('estados-civiles', data)
+    return extractEmbedded('estadosCiviles', data)
+      .map(item => ({id: item.id, nombre: item.estadoCivil, self: item.self}))
+  },
+
+  async evaluadores () {
+    const {data} = await axios.get(`${prefix}/rol/8/asociados`)
+
+    return extractEmbedded('asociados', data)
+      .map(item => ({id: item.id, nombre: item.nombreCompleto, self: item.self}))
   },
 
   async familiaTipos () {
@@ -62,6 +74,7 @@ export default {
     const {data} = await axios.get(`${prefix}/genero`)
 
     return extractEmbedded('generos', data)
+      .map(item => ({id: item.id, nombre: item.genero, self: item.self}))
   },
 
   async ingresos () {
