@@ -4,6 +4,13 @@ import { extractEmbedded, prefix } from './helpers'
 console.log(prefix)
 
 export default {
+  async actividadesEconomicas () {
+    const {data} = await axios.get(`${prefix}/actividadEconomica?size=1000`)
+
+    return extractEmbedded('actividadesEconomicas', data)
+      .map(item => ({id: item.id, nombre: item.actividad, self: item.self}))
+  },
+
   async barrios (departamentoId) {
     const {data} = await axios.get(`${prefix}/barrios`)
 

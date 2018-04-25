@@ -122,11 +122,11 @@
     },
 
     async asyncData ({params}) {
+      const modelo = await usuarioService.evaluacionFamilia(params.id)
       const documentoTipos = await lookupService.documentoTipos()
       const familiaTipos = await lookupService.familiaTipos()
       const parentescos = await lookupService.parentescos()
       const responsabilidades = await lookupService.responsabilidades()
-      const modelo = await usuarioService.evaluacionFamilia(params.id)
       const familiares = await familiaService.familiares(params.id)
 
       return {

@@ -15,6 +15,7 @@
         <v-layout column>
             <v-btn router :to="`/usuario/${$route.params.id}/evaluacion`">Evaluacion</v-btn>
             <v-btn router :to="`/usuario/${$route.params.id}/familiar`">Familiar</v-btn>
+            <v-btn router :to="`/usuario/${$route.params.id}/ocupacion`">Ocupacion</v-btn>
         </v-layout>
     </v-container>
 </template>

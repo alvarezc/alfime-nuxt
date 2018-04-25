@@ -57,12 +57,38 @@ export default {
       .follow('evaluaciones', 'familia')
       .getResource()
       .result
-    // (await axios.get(`${prefix}/usuario/${usuarioId}/evaluaciones`)).data
-    // const links = evaluacion._embedded.evaluaciones.length && evaluacion._embedded.evaluaciones[0]._links
-    // const {data} = await axios.get(links.familia.href)
-
-    console.log(evaluacion)
 
     return fetchLinks(evaluacion, 'familiaTipo', 'padreDocumento', 'madreDocumento')
+  },
+
+  async evaluacionOcupacion (usuarioId) {
+    try {
+      const evaluacion = await traverson
+        .from(`${prefix}/usuario/${usuarioId}/evaluaciones`)
+        .jsonHal()
+        .follow('evaluaciones', 'ocupacion')
+        .getResource()
+        .result
+
+      return fetchLinks(evaluacion, 'ocupacion', 'escolaridad', 'actividadEconomica')
+    } catch (e) {
+      const evaluacion = await traverson
+        .from(`${prefix}/usuario/${usuarioId}/evaluaciones`)
+        .jsonHal()
+        .follow('evaluaciones')
+        .getResource()
+        .result
+
+      return Promise.resolve({
+        evaluacion: evaluacion._links.evaluacion.href,
+        ocupacion: null,
+        escolaridad: null,
+        actividadEconomica: null,
+        rutinaDiaria: '',
+        actividadesTiempoLibre: '',
+        telefono: '',
+        empresa: ''
+      })
+    }
   }
 }
