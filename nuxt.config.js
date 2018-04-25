@@ -43,6 +43,10 @@ module.exports = {
   */
   build: {
     vendor: [
+      'axios',
+      'bluebird',
+      'moment',
+      'traverson',
       '~/plugins/vuetify.js'
     ],
     extractCSS: true,
