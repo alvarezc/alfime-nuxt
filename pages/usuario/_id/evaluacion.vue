@@ -72,7 +72,8 @@
             observaciones: evaluacion.observaciones,
             conclusiones: evaluacion.conclusiones,
             aceptado: evaluacion.aceptado,
-            evaluador: (evaluacion.evaluador.self || evaluacion.evaluador._links.self).href
+            evaluador: (evaluacion.evaluador.self || evaluacion.evaluador._links.self).href,
+            fecha: evaluacion.fecha
           })
 
         console.log(data)

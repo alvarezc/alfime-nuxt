@@ -1,3 +1,4 @@
+import traverson from './traverson'
 import axios from 'axios'
 import moment from 'moment'
 import { prefix, extractEmbedded } from './helpers'
@@ -13,17 +14,7 @@ const evaluacionDefault = {
   evaluador: null
 }
 
-async function agregar (evaluacion) {
-  const {data} = await axios
-    .post(
-      `${prefix}/evaluacion`,
-      evaluacion
-    )
-
-  return data
-}
-
-export default {
+class EvaluacionService {
   async read (usuarioId) {
     const {data} = await axios.get(`${prefix}/usuario/${usuarioId}`)
     const evaluaciones = extractEmbedded('evaluaciones', data)
@@ -34,19 +25,31 @@ export default {
     }
 
     return result
-  },
+  }
 
-  async guarda (evaluacion) {
+  async guarda (source) {
+    const {id, ...evaluacion} = source
+
     if (evaluacion.id === -1) {
-      return agregar(evaluacion)
+      return this.agregar(evaluacion)
     }
 
-    const {data} = await axios
-      .patch(
-        (evaluacion.self && evaluacion.self.href) || `${prefix}/evaluacion/${evaluacion.id}`,
-        evaluacion
-      )
+    let result
+    const save = traverson
+      .from(`${prefix}/evaluacion/${id === -1 ? '' : id}`)
+      .jsonHal()
+      .convertResponseToObject()
 
-    return data
+    if (id === -1) {
+      result = await save.post(evaluacion).result
+    } else {
+      result = await save.patch({id, ...evaluacion}).result
+    }
+
+    return result
   }
 }
+
+const evaluacionService = new EvaluacionService()
+
+export default evaluacionService

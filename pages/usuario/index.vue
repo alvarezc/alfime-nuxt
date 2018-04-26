@@ -22,6 +22,9 @@
                 <td class="lookup__documento">{{props.item.documento}}</td>
             </template>
         </v-data-table>
+        <v-card-actions>
+            <v-btn to="/usuario/agregar">Agregar</v-btn>
+        </v-card-actions>
     </v-card>
 </template>
 

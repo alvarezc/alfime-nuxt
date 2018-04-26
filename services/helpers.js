@@ -1,5 +1,6 @@
 import axios from 'axios'
 import traverson from './traverson'
+import halfred from 'halfred'
 
 export function extractEmbedded (propiedad, {_embedded}, includeLinks) {
   const lista = _embedded[propiedad]
@@ -48,17 +49,25 @@ export async function fetchLinks (result, ...keys) {
   const fetch = async (item) => {
     const result = {...item}
 
+    const parsed = halfred.parse(result)
+
     return Promise
       .all(
         keys
           .map(async (key) => {
             return item._links[key]
-              ? traverson.from(item._links[key].href).getResource()
+              ? traverson.from(item._links[key].href)
+                .jsonHal()
+                .getResource()
                 .result
                 .then(link => {
-                  result[key] = link
+                  const parsed = halfred.parse(link)
+                  const arrays = parsed.allEmbeddedArrays()
+                  const keys = Object.keys(arrays)
+
+                  result[key] = keys.length ? arrays[keys[0]].map(item => item.original()) : parsed.original()
                 })
-              : (result[key] = null)
+              : (result[key] = parsed.embeded(key))
           })
       )
       .then(() => result)

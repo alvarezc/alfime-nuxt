@@ -1,14 +1,27 @@
 import axios from 'axios'
-import { prefix, extractLinks, extractEmbedded, fetchLinks } from './helpers'
+import { prefix, extractLinks, fetchLinks } from './helpers'
 import moment from 'moment/moment'
 import traverson from './traverson'
 
-export default {
+class UsuarioService {
   async read (id) {
     const {data} = await axios.get(`${prefix}/usuario/${id}`)
 
     return extractLinks(true, data)
-  },
+  }
+
+  async readQuick (id) {
+    const temp = await traverson
+      .from(`${prefix}/usuario/${id}?projection=dataTable`)
+      .jsonHal()
+      .follow('self')
+      .getResource()
+      .result
+
+    console.log(temp)
+
+    return temp
+  }
 
   async find (cedula) {
     const {data} = await axios.get(`${prefix}/usuario/search/documentos?documento=${cedula}`)
@@ -19,7 +32,7 @@ export default {
     } else {
       return null
     }
-  },
+  }
 
   async guarda (usuario) {
     const {data} = await axios
@@ -29,7 +42,7 @@ export default {
       )
 
     return data
-  },
+  }
 
   async dataTable () {
     const result = await traverson
@@ -42,26 +55,38 @@ export default {
     console.log(result)
 
     return result
-  },
+  }
 
   async evaluacion (usuarioId) {
-    const {data} = await axios.get(`${prefix}/usuario/${usuarioId}/evaluaciones`)
-    const evaluaciones = extractEmbedded('evaluaciones', data, true)
+    const usuario = await this.readQuick(usuarioId)
+    const remitente = await traverson.from(`${prefix}/remitente/1`)
+      .jsonHal()
+      .getResource()
+      .result
+    const evaluaciones = await traverson.from(`${prefix}/usuario/${usuarioId}/evaluaciones`)
+      .jsonHal()
+      .follow('evaluaciones[$all]')
+      .getResource()
+      .result
 
-    return evaluaciones.length
-      ? extractLinks(false, evaluaciones[0])
+    const result = evaluaciones.length
+      ? await fetchLinks(evaluaciones[0], 'plan', 'aspiracion', 'remitente', 'usuario', 'evaluador')
       : {
         id: -1,
-        usuario: usuarioId,
+        usuario,
         aceptado: false,
         fecha: moment().format('YYYY-MM-DD'),
         observaciones: '',
         conclusiones: '',
         plan: [],
         aspiracion: [],
-        remitente: 1
+        remitente
       }
-  },
+
+    console.log(result)
+
+    return result
+  }
 
   async evaluacionFamilia (usuarioId) {
     const evaluacion = await traverson
@@ -72,7 +97,7 @@ export default {
       .result
 
     return fetchLinks(evaluacion, 'familiaTipo', 'padreDocumento', 'madreDocumento')
-  },
+  }
 
   async evaluacionOcupacion (usuarioId) {
     try {
@@ -105,3 +130,7 @@ export default {
     }
   }
 }
+
+const usuarioService = new UsuarioService()
+
+export default usuarioService

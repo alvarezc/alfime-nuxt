@@ -35,7 +35,6 @@
         </v-layout>
 
         <v-btn @click="guarda()">Guardar</v-btn>
-        {{modelo}}
     </v-container>
 </template>
 
