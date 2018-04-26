@@ -31,6 +31,19 @@ export default {
     return data
   },
 
+  async dataTable () {
+    const result = await traverson
+      .from(`${prefix}/usuario?projection=dataTable`)
+      .jsonHal()
+      .follow('usuarios[$all]')
+      .getResource()
+      .result
+
+    console.log(result)
+
+    return result
+  },
+
   async evaluacion (usuarioId) {
     const {data} = await axios.get(`${prefix}/usuario/${usuarioId}/evaluaciones`)
     const evaluaciones = extractEmbedded('evaluaciones', data, true)
