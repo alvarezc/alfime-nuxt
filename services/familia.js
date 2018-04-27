@@ -76,7 +76,7 @@ export default {
 
   async guardaFamilia ({id, ...evaluacionFamiliar}) {
     const result = traverson
-      .from(evaluacionFamiliar._links.self.href)
+      .from(`${prefix}/evaluacionFamilia/${id === -1 ? '' : id}`)
       .jsonHal()
       .convertResponseToObject()
 

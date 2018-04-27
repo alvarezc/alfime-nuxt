@@ -1,6 +1,8 @@
 import axios from 'axios'
 import traverson from './traverson'
 import halfred from 'halfred'
+// import URI from 'urijs'
+import URITemplate from 'urijs/src/URITemplate'
 
 export function extractEmbedded (propiedad, {_embedded}, includeLinks) {
   const lista = _embedded[propiedad]
@@ -67,7 +69,7 @@ export async function fetchLinks (result, ...keys) {
 
                   result[key] = keys.length ? arrays[keys[0]].map(item => item.original()) : parsed.original()
                 })
-              : (result[key] = parsed.embeded(key))
+              : (result[key] = parsed.embedded(key))
           })
       )
       .then(() => result)
@@ -90,7 +92,19 @@ export function cleanSelf (source) {
       const value = target[key]
 
       if (key !== '_links' && value !== null && value !== void 0) { // Make sure it's not null or undefined first
-        target[key] = (value.self || (value._links && value._links.self) || {href: value}).href
+        if (typeof value === 'object') {
+          const parsed = halfred.parse(Array.isArray(value) ? value[0] : value)
+          const links = parsed.allLinks()
+          const selfTemp = (value.self || links.self)
+          const self = Array.isArray(selfTemp) ? selfTemp[0] : selfTemp
+          const uri = !self.templated ? self.href : new URITemplate(self.href).expand({})
+
+          console.log(parsed)
+
+          target[key] = uri
+        } else {
+          target[key] = value
+        }
       }
     } else {
       console.log(`Not own key ${key}`)

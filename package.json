@@ -18,6 +18,7 @@
     "traverson": "^6.0.3",
     "traverson-hal": "^6.0.0",
     "traverson-promise": "^0.0.9",
+    "urijs": "^1.19.1",
     "vuetify": "^1.0.0"
   },
   "devDependencies": {

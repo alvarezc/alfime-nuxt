@@ -122,12 +122,12 @@
     },
 
     async asyncData ({params}) {
-      const modelo = await usuarioService.evaluacionFamilia(params.id)
+      const modelo = await usuarioService.evaluacionFamilia(params.evaluacion)
       const documentoTipos = await lookupService.documentoTipos()
       const familiaTipos = await lookupService.familiaTipos()
       const parentescos = await lookupService.parentescos()
       const responsabilidades = await lookupService.responsabilidades()
-      const familiares = await familiaService.familiares(params.id)
+      const familiares = modelo.id === -1 ? [] : await familiaService.familiares(params.id)
 
       return {
         familiaTipos,
@@ -259,7 +259,9 @@
       },
 
       async guarda () {
-        familiaService.guardaFamilia(this.modelo)
+        const result = await familiaService.guardaFamilia(this.modelo)
+
+        console.log(result)
       },
 
       editItem (props) {
