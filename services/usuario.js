@@ -89,14 +89,37 @@ class UsuarioService {
   }
 
   async evaluacionFamilia (usuarioId) {
-    const evaluacion = await traverson
-      .from(`${prefix}/usuario/${usuarioId}/evaluaciones`)
-      .jsonHal()
-      .follow('evaluaciones', 'familia')
-      .getResource()
-      .result
+    try {
+      const evaluacion = await traverson
+        .from(`${prefix}/usuario/${usuarioId}/evaluaciones`)
+        .jsonHal()
+        .follow('evaluaciones', 'familia')
+        .getResource()
+        .result
 
-    return fetchLinks(evaluacion, 'familiaTipo', 'padreDocumento', 'madreDocumento')
+      console.log(evaluacion)
+
+      return fetchLinks(evaluacion, 'familiaTipo', 'padreDocumento', 'madreDocumento')
+    } catch (d) {
+      console.log(d)
+
+      return {
+        id: -1,
+        familiaTipo: null,
+        calidadRelaciones: '',
+        padreNumero: '',
+        padreIdentificacion: null,
+        padreNombre: '',
+        madreNumero: '',
+        madreIdentificacion: null,
+        madreNombre: '',
+        _links: {
+          self: {
+            href: d.url
+          }
+        }
+      }
+    }
   }
 
   async evaluacionOcupacion (usuarioId) {

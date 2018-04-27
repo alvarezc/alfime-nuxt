@@ -61,7 +61,7 @@
       async guarda () {
         const {usuario, ...evaluacion} = this.evaluacion
 
-        const data = await evaluacionService
+        await evaluacionService
           .guarda({
             id: evaluacion.id,
             self: evaluacion.self,
@@ -76,9 +76,7 @@
             fecha: evaluacion.fecha
           })
 
-        console.log(data)
-
-        // this.$nuxt.$router.push(`/usuario/${evaluacion.usuario.id}`)
+        this.$nuxt.$router.push(`/usuario/${this.$route.params.id}`)
       }
     }
   }

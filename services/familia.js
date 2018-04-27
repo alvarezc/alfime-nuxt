@@ -3,15 +3,19 @@ import { prefix, fetchLinks, cleanSelf } from './helpers'
 
 export default {
   async familiares (id) {
-    const result = await traverson
-      .from(`${prefix}/evaluacion/${id}/familia`)
-      .jsonHal()
-      .follow('miembros')
-      .follow('familiares[$all]')
-      .getResource()
-      .result
+    try {
+      const result = await traverson
+        .from(`${prefix}/evaluacion/${id}/familia`)
+        .jsonHal()
+        .follow('miembros')
+        .follow('familiares[$all]')
+        .getResource()
+        .result
 
-    return fetchLinks(result, 'parentesco', 'responsabilidad')
+      return fetchLinks(result, 'parentesco', 'responsabilidad')
+    } catch (e) {
+      return []
+    }
 
     // return Promise
     //   .all(
@@ -70,14 +74,20 @@ export default {
     return fetchLinks(result, 'parentesco', 'responsabilidad')
   },
 
-  async guardaFamilia (evaluacionFamiliar) {
-    const result = await traverson
+  async guardaFamilia ({id, ...evaluacionFamiliar}) {
+    const result = traverson
       .from(evaluacionFamiliar._links.self.href)
       .jsonHal()
       .convertResponseToObject()
-      .patch(cleanSelf(evaluacionFamiliar))
-      .result
 
-    return result
+    if (id === -1) {
+      return result
+        .post(cleanSelf(evaluacionFamiliar))
+        .result
+    } else {
+      return result
+        .patch(cleanSelf(evaluacionFamiliar))
+        .result
+    }
   }
 }

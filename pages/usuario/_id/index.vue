@@ -12,10 +12,8 @@
         <v-layout>
             {{usuario.ciudad.ciudad}}, {{usuario.ciudad.departamento.departamento}}
         </v-layout>
-        <v-layout column>
-            <v-btn router :to="`/usuario/${$route.params.id}/evaluacion`">Evaluacion</v-btn>
-            <v-btn router :to="`/usuario/${$route.params.id}/familiar`">Familiar</v-btn>
-            <v-btn router :to="`/usuario/${$route.params.id}/ocupacion`">Ocupacion</v-btn>
+        <v-layout>
+            <v-btn router :to="`/usuario/${$route.params.id}/evaluacion/${evaluacion.id === -1 ? 'agregar' : evaluacion.id}`">Evaluacion</v-btn>
         </v-layout>
     </v-container>
 </template>
@@ -29,11 +27,13 @@
 
     async asyncData ({params}) {
       const usuario = await usuarioServicio.read(params.id)
+      const evaluacion = await usuarioServicio.evaluacion(params.id)
 
       console.log(usuario)
 
       return {
-        usuario: {...usuario, nacimiento: moment(usuario.nacimiento).format('YYYY-MM-DD')}
+        usuario: {...usuario, nacimiento: moment(usuario.nacimiento).format('YYYY-MM-DD')},
+        evaluacion
       }
     }
   }
