@@ -5,23 +5,25 @@
                 :clipped="clipped"
                 v-model="drawer"
                 fixed
-                app
-        >
+                app>
             <v-list>
-                <v-list-tile
-                        router
-                        :to="item.to"
-                        :key="i"
-                        v-for="(item, i) in items"
-                        exact
-                >
-                    <v-list-tile-action>
-                        <v-icon v-html="item.icon"></v-icon>
-                    </v-list-tile-action>
-                    <v-list-tile-content>
-                        <v-list-tile-title v-text="item.title"></v-list-tile-title>
-                    </v-list-tile-content>
-                </v-list-tile>
+                <template v-for="item in items">
+                    <v-divider v-if="item.icon && item.id !== 1"></v-divider>
+                    <v-list-tile
+                            router
+                            :to="item.to"
+                            :key="item.id"
+                            :exact="item.exact"
+                            :disabled="item.disabled">
+                        <v-list-tile-action>
+                            <v-icon v-html="item.icon" v-if="item.icon"></v-icon>
+                        </v-list-tile-action>
+                        <v-list-tile-content>
+                            <v-list-tile-title v-text="item.title"></v-list-tile-title>
+                        </v-list-tile-content>
+                    </v-list-tile>
+                </template>
+                <v-divider></v-divider>
             </v-list>
         </v-navigation-drawer>
         <v-toolbar fixed app :clipped-left="clipped">
@@ -82,6 +84,7 @@
 
 <script>
   import usuarioService from '~/services/usuario'
+  import { mapState } from 'vuex'
 
   export default {
     data () {
@@ -89,12 +92,6 @@
         clipped: false,
         drawer: true,
         fixed: false,
-        items: [
-          {icon: 'apps', title: 'Bienvenidos', to: '/'},
-          {icon: 'bubble_chart', title: 'Inspire', to: '/inspire'},
-          {icon: 'perm_identity', title: 'Usuario', to: '/usuario'},
-          {icon: 'widgets', title: 'Administración', to: '/admin'}
-        ],
         miniVariant: false,
         right: true,
         rightDrawer: false,
@@ -109,6 +106,42 @@
 
         this.$nuxt.$router.push(`/usuario/${usuario.id}`)
       }
+    },
+
+    computed: {
+      items () {
+        const subItems = []
+        const alfime = this.$store.state.alfime
+        const usuario = alfime.usuario
+        const evaluacion = alfime.evaluacion
+
+        if (usuario && evaluacion) {
+          subItems.push(
+            {id: 41, title: 'Familia', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/familia`},
+            {id: 42, title: 'Ocupacion', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/ocupacion`},
+            {id: 43, title: 'Ingresos', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/ingresos`}
+          )
+        }
+
+        return [
+          {id: 1, icon: 'apps', title: 'Bienvenidos', to: '/', exact: true},
+          {id: 2, icon: 'bubble_chart', title: 'Inspire', to: '/inspire', exact: true},
+          {id: 3, icon: 'perm_identity', title: 'Usuario', to: '/usuario', exact: true},
+          {
+            id: 4,
+            icon: 'assignment',
+            title: 'Evaluacion',
+            to: `/usuario/${usuario && usuario.id}/evaluacion/${evaluacion && evaluacion.id}`,
+            disabled: !evaluacion,
+            exact: false
+          },
+          ...subItems,
+          {id: 5, icon: 'widgets', title: 'Administración', to: '/admin', exact: true}
+        ]
+      },
+      ...mapState({
+        usuario: state => state.alfime.usuario // Namespaced property doesn't work
+      })
     }
   }
 </script>
