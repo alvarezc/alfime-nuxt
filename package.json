@@ -19,7 +19,8 @@
     "traverson-hal": "^6.0.0",
     "traverson-promise": "^0.0.9",
     "urijs": "^1.19.1",
-    "vuetify": "^1.0.0"
+    "vuetify": "^1.0.0",
+    "vuex-persistedstate": "^2.5.2"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",

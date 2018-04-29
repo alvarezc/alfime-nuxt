@@ -12,8 +12,12 @@
         <v-layout>
             {{usuario.ciudad.ciudad}}, {{usuario.ciudad.departamento.departamento}}
         </v-layout>
+        {{stateUsuario}}
         <v-layout>
-            <v-btn router :to="`/usuario/${$route.params.id}/evaluacion/${evaluacion.id === -1 ? 'agregar' : evaluacion.id}`">Evaluacion</v-btn>
+            <v-btn router
+                   :to="`/usuario/${$route.params.id}/evaluacion/${evaluacionId ? evaluacionId : 'agregar'}`">
+                Evaluacion
+            </v-btn>
         </v-layout>
     </v-container>
 </template>
@@ -21,20 +25,36 @@
 <script>
   import usuarioServicio from '~/services/usuario'
   import moment from 'moment'
+  import { mapMutations, mapState } from 'vuex'
 
   export default {
     name: 'index',
 
     async asyncData ({params}) {
       const usuario = await usuarioServicio.read(params.id)
-      const evaluacion = await usuarioServicio.evaluacion(params.id)
-
-      console.log(usuario)
+      const evaluacionId = await usuarioServicio.evaluacionId(params.id)
 
       return {
         usuario: {...usuario, nacimiento: moment(usuario.nacimiento).format('YYYY-MM-DD')},
-        evaluacion
+        evaluacionId
       }
+    },
+
+    computed: {
+      ...mapState({
+        stateUsuario: 'usuario'
+      })
+    },
+
+    methods: {
+      ...mapMutations({
+        updateUsuario: 'alfime/updateUsuario',
+        updateEvaluacion: 'alfime/updateEvaluacion'
+      })
+    },
+
+    created () {
+      this.updateEvaluacion({id: this.evaluacionId})
     }
   }
 </script>

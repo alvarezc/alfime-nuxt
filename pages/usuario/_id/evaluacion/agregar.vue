@@ -1,53 +1,18 @@
 <template>
-    <v-container>
-        <usuario :usuario="evaluacion.usuario"></usuario>
-
-        <lookup :items="programas" chips multiple label="Programas que Aspira Ingresar"
-                v-model="evaluacion.aspiracion"></lookup>
-
-        <lookup :items="remitentes" label="Remitente" v-model="evaluacion.remitente"></lookup>
-
-        <v-text-field label="Observaciones" multi-line v-model="evaluacion.observaciones"></v-text-field>
-
-        <v-text-field label="Conclusiones" multi-line v-model="evaluacion.conclusiones"></v-text-field>
-
-        <lookup :items="programas" chips multiple v-model="evaluacion.plan"
-                label="Plan de Intervención"></lookup>
-
-        <v-switch label="Aceptado" v-model="evaluacion.aceptado"></v-switch>
-
-        <lookup :items="evaluadores" v-model="evaluacion.evaluador" label="Evaluador"></lookup>
-
-        <v-btn @click="guarda()">Guardar</v-btn>
-    </v-container>
+    <a-evaluacion v-model="datos" @click="guarda()"></a-evaluacion>
 </template>
 
 <script>
-  import lookup from '~/components/lookup'
-  import usuario from '~/components/usuario'
-  import lookupService from '~/services/lookup'
-  import usuarioService from '~/services/usuario'
   import evaluacionService from '~/services/evaluacion'
 
   export default {
-    name: 'evaluacion',
-
-    components: {
-      lookup,
-      usuario
-    },
+    name: 'agregar',
 
     async asyncData ({params}) {
-      const programas = await lookupService.programas()
-      const remitentes = await lookupService.remitentes()
-      const evaluadores = await lookupService.evaluadores()
-      const evaluacion = await usuarioService.evaluacion(params.id)
+      const datos = await evaluacionService.empty(params.id)
 
       return {
-        programas,
-        remitentes,
-        evaluacion,
-        evaluadores
+        datos
       }
     },
 
@@ -59,7 +24,7 @@
 
     methods: {
       async guarda () {
-        const {usuario, ...evaluacion} = this.evaluacion
+        const {usuario, ...evaluacion} = this.datos
 
         await evaluacionService
           .guarda({

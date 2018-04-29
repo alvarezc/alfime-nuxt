@@ -1,13 +1,42 @@
 import axios from 'axios'
-import { prefix, extractLinks, fetchLinks } from './helpers'
+import { prefix, fetchLinks } from './helpers'
 import moment from 'moment/moment'
 import traverson from './traverson'
 
 class UsuarioService {
   async read (id) {
-    const {data} = await axios.get(`${prefix}/usuario/${id}`)
+    const {result, traversal} = await traverson
+      .from(`${prefix}/usuario/${id}`)
+      .jsonHal()
+      .getResource()
+      .resultWithTraversal()
 
-    return extractLinks(true, data)
+    const departamento = await traversal
+      .continue()
+      .follow('ciudad', 'departamento')
+      .getResource()
+      .result
+
+    return Promise
+      .all(
+        ['tipoDocumento', 'genero', 'ciudad', 'evaluador']
+          .map(async item => {
+            try {
+              result[item] = await traversal
+                .continue()
+                .follow(item)
+                .getResource()
+                .result
+            } catch (e) {
+              console.log(e)
+            }
+          })
+      )
+      .then(() => {
+        result.ciudad.departamento = departamento
+
+        return result
+      })
   }
 
   async readQuick (id) {
@@ -55,6 +84,17 @@ class UsuarioService {
     console.log(result)
 
     return result
+  }
+
+  async evaluacionId (usuarioId) {
+    try {
+      const {data} = await axios.get(`${prefix}/usuario/${usuarioId}/evaluaciones?projection=id`)
+      const {_embedded} = data
+
+      return Array.isArray(_embedded.evaluaciones) ? _embedded.evaluaciones[0].id : null
+    } catch (e) {
+      return null
+    }
   }
 
   async evaluacion (usuarioId) {
@@ -137,7 +177,7 @@ class UsuarioService {
         .getResource()
         .result
 
-      return fetchLinks(evaluacion, 'ocupacion', 'escolaridad', 'actividadEconomica')
+      return fetchLinks(evaluacion, 'ocupacion', 'escolaridad')
     } catch (e) {
       const evaluacion = await traverson
         .from(`${prefix}/usuario/${usuarioId}/evaluaciones`)
@@ -150,7 +190,7 @@ class UsuarioService {
         evaluacion: evaluacion._links.evaluacion.href,
         ocupacion: null,
         escolaridad: null,
-        actividadEconomica: null,
+        actividadEconomica: '',
         rutinaDiaria: '',
         actividadesTiempoLibre: '',
         telefono: '',

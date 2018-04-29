@@ -18,6 +18,9 @@ module.exports = {
   */
   head: {
     title: 'ALFIME - Gestión de Atención',
+    htmlAttrs: {
+      lang: 'es-co'
+    },
     meta: [
       {charset: 'utf-8'},
       {name: 'viewport', content: 'width=device-width, initial-scale=1'},
@@ -29,7 +32,11 @@ module.exports = {
     ]
   },
 
-  plugins: ['~/plugins/vuetify.js'],
+  plugins: [
+    '~/plugins/vuetify.js',
+    '~/plugins/components.js',
+    {src: '~/plugins/localStorage.js', ssr: false}
+  ],
 
   css: [
     '~/assets/style/app.styl'

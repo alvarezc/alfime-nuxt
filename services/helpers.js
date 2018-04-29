@@ -85,7 +85,7 @@ export async function fetchLinks (result, ...keys) {
 }
 
 export function cleanSelf (source) {
-  const target = {...source}
+  const {_embedded, ...target} = source
 
   for (let key in target) {
     if (target.hasOwnProperty(key)) {
@@ -93,15 +93,26 @@ export function cleanSelf (source) {
 
       if (key !== '_links' && value !== null && value !== void 0) { // Make sure it's not null or undefined first
         if (typeof value === 'object') {
-          const parsed = halfred.parse(Array.isArray(value) ? value[0] : value)
-          const links = parsed.allLinks()
-          const selfTemp = (value.self || links.self)
-          const self = Array.isArray(selfTemp) ? selfTemp[0] : selfTemp
-          const uri = !self.templated ? self.href : new URITemplate(self.href).expand({})
+          // const parsed = halfred.parse(Array.isArray(value) ? value[0] : value)
+          if (Array.isArray(value)) {
+            target[key] = value
+              .map(item => {
+                const parsed = halfred.parse(item)
+                const links = parsed.allLinks()
+                const selfTemp = links.self || parsed.self
+                const self = Array.isArray(selfTemp) ? selfTemp[0] : selfTemp
 
-          console.log(parsed)
+                return !self.templated ? self.href : new URITemplate(self.href).expand({})
+              })
+          } else {
+            const parsed = halfred.parse(value)
+            const links = parsed.allLinks()
+            const selfTemp = (value.self || links.self)
+            const self = Array.isArray(selfTemp) ? selfTemp[0] : selfTemp
+            const uri = !self.templated ? self.href : new URITemplate(self.href).expand({})
 
-          target[key] = uri
+            target[key] = uri
+          }
         } else {
           target[key] = value
         }
@@ -112,4 +123,31 @@ export function cleanSelf (source) {
   }
 
   return target
+}
+
+export async function traverse (traversal, target, ...keys) {
+  return Promise
+    .all(
+      keys
+        .map(key =>
+          traversal
+            .continue()
+            .follow(key)
+            .getResource()
+            .result
+            .then(value => {
+              if (value._embedded) {
+                const embedded = value._embedded
+
+                target[key] = embedded[Object.keys(embedded)[0]]
+              } else {
+                target[key] = value
+              }
+            })
+            .catch(() => {
+              target[key] = null
+            })
+        )
+    )
+    .then(() => target)
 }

@@ -12,7 +12,7 @@ export default {
         .post(cleanSelf(evaluacionOcupacion))
         .result
 
-      return fetchLinks(result, 'ocupacion', 'escolaridad', 'actividadEconomica')
+      return fetchLinks(result, 'ocupacion', 'escolaridad')
     } else {
       // Actualizar
       const result = await traverson
@@ -22,7 +22,7 @@ export default {
         .patch(cleanSelf(evaluacionOcupacion))
         .result
 
-      return fetchLinks(result, 'ocupacion', 'escolaridad', 'actividadEconomica')
+      return fetchLinks(result, 'ocupacion', 'escolaridad')
     }
   }
 }

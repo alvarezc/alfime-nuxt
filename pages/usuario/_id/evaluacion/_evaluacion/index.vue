@@ -47,7 +47,7 @@
 
             <v-layout column>
                 <h4>Evaluador</h4>
-                <v-list>
+                <v-list v-if="evaluacion.evaluador">
                     <v-list-tile>
                         <v-list-tile-content>{{evaluacion.evaluador.nombreCompleto}}</v-list-tile-content>
                     </v-list-tile>
@@ -56,10 +56,10 @@
         </v-card-text>
 
         <v-card-actions>
-            <v-btn :to="`/usuario/${$route.params.id}/evaluacion/agregar`">Editar</v-btn>
-            <v-btn :to="`/usuario/${$route.params.id}/evaluacion/${$route.params.evaluacion}/familiar`">Familia</v-btn>
-            <v-btn :to="`/usuario/${$route.params.id}/evaluacion/${$route.params.evaluacion}/ocupacion`">Ocupacion
-            </v-btn>
+            <v-btn flat color="blue" :to="`${parentLink}/editar`">Editar</v-btn>
+            <v-btn flat color="orange" :to="`${parentLink}/familia`">Familia</v-btn>
+            <v-btn flat color="orange" :to="`${parentLink}/ocupacion`">Ocupacion</v-btn>
+            <v-btn flat color="orange" :to="`${parentLink}/ingresos`">Ingresos</v-btn>
         </v-card-actions>
     </v-card>
 </template>
@@ -67,7 +67,7 @@
 <script>
   import lookup from '~/components/lookup'
   import usuario from '~/components/usuario'
-  import usuarioService from '~/services/usuario'
+  import evaluacionService from '~/services/evaluacion'
 
   export default {
     name: 'evaluacion',
@@ -78,7 +78,7 @@
     },
 
     async asyncData ({params}) {
-      const evaluacion = await usuarioService.evaluacion(params.id)
+      const evaluacion = await evaluacionService.read(params.evaluacion)
 
       return {
         evaluacion
@@ -87,7 +87,8 @@
 
     data () {
       return {
-        title: 'Evaluación'
+        title: 'Evaluación',
+        parentLink: `/usuario/${this.$route.params.id}/evaluacion/${this.$route.params.evaluacion}`
       }
     },
 

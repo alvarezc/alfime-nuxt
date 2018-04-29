@@ -18,7 +18,9 @@
                 class="elevation-1">
             <template slot="items" slot-scope="props">
                 <td class="lookup__id">{{props.item.id}}</td>
-                <td class="lookup__nombre"><nuxt-link :to="`/usuario/${props.item.id}`">{{props.item.nombre}}</nuxt-link></td>
+                <td class="lookup__nombre">
+                    <v-btn flat @click="changeUsuario(props.item)">{{props.item.nombre}}</v-btn>
+                </td>
                 <td class="lookup__documento">{{props.item.documento}}</td>
             </template>
         </v-data-table>
@@ -30,6 +32,7 @@
 
 <script>
   import usuarioService from '~/services/usuario'
+  import { mapMutations } from 'vuex'
 
   export default {
     name: 'index',
@@ -57,6 +60,21 @@
           {text: 'Documento', value: 'documento'}
         ]
       }
+    },
+
+    created () {
+      this.updateUsuario(null)
+    },
+
+    methods: {
+      changeUsuario (usuario) {
+        this.updateUsuario(usuario)
+        this.$router.push(`/usuario/${usuario.id}`)
+      },
+
+      ...mapMutations({
+        updateUsuario: 'alfime/updateUsuario'
+      })
     }
   }
 </script>

@@ -16,9 +16,13 @@
     data () {
       return {
         lookups: [
-          {id: 'actividadesEconomicas', label: 'Actividades Económicas'},
           {id: 'discapacidades', label: 'Discapacidades'},
-          {id: 'documentoTipos', label: 'Tipo de Documentos'}
+          {id: 'documentoTipos', label: 'Tipos de Documentos'},
+          {id: 'generos', label: 'Géneros'},
+          {id: 'barrios', label: 'Barrios'},
+          {id: 'frecuencias', label: 'Frecuencias'},
+          {id: 'ingresos', label: 'Ingresos'},
+          {id: 'parentescos', label: 'Parentescos'}
         ]
       }
     }

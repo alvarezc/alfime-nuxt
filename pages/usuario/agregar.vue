@@ -45,6 +45,7 @@
   import calendar from '~/components/calendar'
   import lookup from '~/components/lookup'
   import identificacion from '~/components/identificacion'
+  import { mapMutations } from 'vuex'
 
   export default {
     name: 'index',
@@ -110,12 +111,17 @@
       async changeDepartamento (newValue) {
         console.log(JSON.stringify(newValue))
         this.cargaCiudades(newValue.id) // Carga ciudades cuando cambie
-      }
+      },
+
+      ...mapMutations({
+        updateUsuario: 'alfime/updateUsuario'
+      })
     },
 
     created () {
       this.departamento = this.departamentos.find(item => item.id === 5) // Antioquia
       this.changeDepartamento(this.departamento)
+      this.updateUsuario(null) // Must clear usuario
     }
   }
 </script>
