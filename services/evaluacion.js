@@ -83,13 +83,13 @@ class EvaluacionService {
   async guarda (source) {
     const {id, ...evaluacion} = source
 
-    if (evaluacion.id === -1) {
-      return this.agregar(evaluacion)
+    if (id === -1) {
+      return this.agregarEvaluacion(evaluacion)
     }
 
     let result
     const save = traverson
-      .from(`${prefix}/evaluacion/${id === -1 ? '' : id}`)
+      .from(`${prefix}/evaluacion/${id}`)
       .jsonHal()
       .convertResponseToObject()
 
@@ -98,6 +98,15 @@ class EvaluacionService {
     result = await save.patch(cleanSelf({id, ...sinUsuario})).result
 
     return result
+  }
+
+  async agregarEvaluacion (evaluacion) {
+    const save = traverson
+      .from(`${prefix}/evaluacion`)
+      .jsonHal()
+      .convertResponseToObject()
+
+    return save.post(cleanSelf(evaluacion)).result
   }
 
   async evaluacionIngresos (evaluacionId) {

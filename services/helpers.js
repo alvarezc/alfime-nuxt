@@ -102,7 +102,11 @@ export function cleanSelf (source) {
                 const selfTemp = links.self || parsed.self
                 const self = Array.isArray(selfTemp) ? selfTemp[0] : selfTemp
 
-                return !self.templated ? self.href : new URITemplate(self.href).expand({})
+                return self
+                  ? !self.templated
+                    ? self.href
+                    : new URITemplate(self.href).expand({})
+                  : item
               })
           } else {
             const parsed = halfred.parse(value)
