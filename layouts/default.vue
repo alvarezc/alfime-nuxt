@@ -125,7 +125,6 @@
 
         return [
           {id: 1, icon: 'apps', title: 'Bienvenidos', to: '/', exact: true},
-          {id: 2, icon: 'bubble_chart', title: 'Inspire', to: '/inspire', exact: true},
           {id: 3, icon: 'perm_identity', title: 'Usuario', to: '/usuario', exact: true},
           {
             id: 4,
