@@ -119,7 +119,12 @@
           subItems.push(
             {id: 41, title: 'Familia', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/familia`},
             {id: 42, title: 'Ocupacion', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/ocupacion`},
-            {id: 43, title: 'Ingresos', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/ingresos`}
+            {id: 43, title: 'Ingresos', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/ingresos`},
+            {id: 44, title: 'Securidad Social', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/seguridad-social`},
+            {id: 45, title: 'Aspecto Laboral', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/aspecto-laboral`},
+            {id: 46, title: 'Aspecto Psicologico', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/aspecto-psicologico`},
+            {id: 47, title: 'Contacto', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/contacto`},
+            {id: 48, title: 'Aspecto Médico', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/medico`}
           )
         }
 
@@ -135,7 +140,11 @@
             exact: false
           },
           ...subItems,
-          {id: 5, icon: 'widgets', title: 'Administración', to: '/admin', exact: true}
+          {id: 5, icon: 'widgets', title: 'Administración', to: '/admin', exact: true},
+          {id: 6, icon: 'widgets', title: 'Aula Pedagogica', to: '/aula', exact: true},
+          {id: 7, icon: 'widgets', title: 'Deportes', to: '/deporte', exact: true},
+          {id: 8, icon: 'widgets', title: 'Fisioterapia', to: '/fisioterapia', exact: true},
+          {id: 8, icon: 'widgets', title: 'Psicologia', to: '/psicologia', exact: true}
         ]
       },
       ...mapState({

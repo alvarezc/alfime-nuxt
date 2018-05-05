@@ -24,6 +24,26 @@ class EvaluacionService {
     return traverse(traversal, result, 'plan', 'aspiracion', 'remitente', 'usuario', 'evaluador')
   }
 
+  async readEvaluacionSalud (evaluacionId) {
+    try {
+      const {result, traversal} = await traverson
+        .from(`${prefix}/evaluacionSalud/${evaluacionId}`)
+        .jsonHal()
+        .getResource()
+        .resultWithTraversal()
+
+      return traverse(traversal, result, 'fondoPension', 'cajaCompensacion', 'regimen', 'eps')
+    } catch (e) {
+      return {
+        id: -1,
+        fondoPension: null,
+        cajaCompensacion: null,
+        regimen: null,
+        eps: null
+      }
+    }
+  }
+
   async empty (usuarioId) {
     const remitente = await traverson.from(`${prefix}/remitente/1`)
       .jsonHal()
@@ -75,8 +95,6 @@ class EvaluacionService {
         remitente
       }
 
-    console.log(result)
-
     return result
   }
 
@@ -109,6 +127,42 @@ class EvaluacionService {
     return save.post(cleanSelf(evaluacion)).result
   }
 
+  async guardaEvaluacionSalud (source) {
+    const {id, ...salud} = source
+
+    if (id === -1) {
+      return this.agregarEvaluacionSalud(salud)
+    }
+
+    const {result, traversal} = await traverson
+      .from(`${prefix}/evaluacionSalud/${id}`)
+      .jsonHal()
+      .convertResponseToObject()
+      .patch(
+        cleanSelf({
+          id,
+          ...salud
+        }))
+      .resultWithTraversal()
+
+    return traverse(traversal, result, 'fondoPension', 'cajaCompensacion', 'regimen', 'eps')
+  }
+
+  async agregarEvaluacionSalud (evaluacionId, {id, ...salud}) {
+    const {result, traversal} = await traverson
+      .from(`${prefix}/evaluacionSalud`)
+      .jsonHal()
+      .convertResponseToObject()
+      .post(
+        cleanSelf({
+          evaluacion: `${prefix}/evaluacion/${evaluacionId}`,
+          ...salud
+        })
+      ).resultWithTraversal()
+
+    return traverse(traversal, result, 'fondoPension', 'cajaCompensacion', 'regimen', 'eps')
+  }
+
   async evaluacionIngresos (evaluacionId) {
     const ingresos = await traverson
       .from(`${prefix}/evaluacionIngreso/search/findByEvaluacionId`)
@@ -118,7 +172,32 @@ class EvaluacionService {
       .getResource()
       .result
 
-    console.log(ingresos)
+    return ingresos
+  }
+
+  async evaluacionDiscapacidades (evaluacionId) {
+    const discapacidades = await traverson
+      .from(`${prefix}/evaluacionDiscapacidad/search/findByEvaluacionId`)
+      .withRequestOptions({qs: {evaluacionId: evaluacionId, projection: 'completo'}})
+      .jsonHal()
+      .follow('evaluacionesDiscapacidades[$all]')
+      .getResource()
+      .result
+
+    return discapacidades.map(item => ({
+      ...item,
+      adquisicion: moment(item.adquisicion).format('YYYY-MM-DD')
+    }))
+  }
+
+  async evaluacionAtenciones (evaluacionId) {
+    const ingresos = await traverson
+      .from(`${prefix}/evaluacionAtencion/search/findByEvaluacionId`)
+      .withRequestOptions({qs: {evaluacionId: evaluacionId, projection: 'completo'}})
+      .jsonHal()
+      .follow('evaluacionesAtenciones[$all]')
+      .getResource()
+      .result
 
     return ingresos
   }
@@ -163,6 +242,90 @@ class EvaluacionService {
       .result
 
     return ingreso
+  }
+
+  async guardaDiscapacidad (discapacidad) {
+    const {traversal} = await traverson
+      .from(`${prefix}/evaluacionDiscapacidad/${discapacidad.id}`)
+      .jsonHal()
+      .convertResponseToObject()
+      .patch(discapacidad)
+      .resultWithTraversal()
+
+    return traversal.continue().follow('evaluacionDiscapacidad')
+      .withTemplateParameters({projection: 'completo'})
+      .getResource()
+      .result
+  }
+
+  async agregaDiscapacidad (evaluacionId, discapacidad) {
+    const {traversal} = await traverson
+      .from(`${prefix}/evaluacionDiscapacidad`)
+      .jsonHal()
+      .convertResponseToObject()
+      .post({
+        evaluacion: `${prefix}/evaluacion/${evaluacionId}`,
+        ...discapacidad
+      })
+      .resultWithTraversal()
+
+    return traversal.continue()
+      .follow('evaluacionDiscapacidad')
+      .withTemplateParameters({projection: 'completo'})
+      .getResource()
+      .result
+  }
+
+  async borraDiscapacidad (discapacidad) {
+    await traverson
+      .from(discapacidad._links.self.href)
+      .jsonHal()
+      .delete()
+      .result
+
+    return discapacidad
+  }
+
+  async guardaAtencion (atencion) {
+    const {traversal} = await traverson
+      .from(`${prefix}/evaluacionAtencion/${atencion.id}`)
+      .jsonHal()
+      .convertResponseToObject()
+      .patch(atencion)
+      .resultWithTraversal()
+
+    return traversal.continue().follow('evaluacionAtencion')
+      .withTemplateParameters({projection: 'completo'})
+      .getResource()
+      .result
+  }
+
+  async agregaAtencion (evaluacionId, atencion) {
+    const {traversal} = await traverson
+      .from(`${prefix}/evaluacionAtencion`)
+      .jsonHal()
+      .convertResponseToObject()
+      .post({
+        evaluacion: `${prefix}/evaluacion/${evaluacionId}`,
+        ...atencion
+      })
+      .resultWithTraversal()
+
+    return traversal.continue()
+      .follow('evaluacionAtencion')
+      .withTemplateParameters({projection: 'completo'})
+      .getResource()
+      .result
+  }
+
+  async borraAtencion (atencion) {
+    await traverson
+      .from(atencion._links.self.href)
+      .jsonHal()
+      .delete()
+      .result
+
+    return atencion
   }
 }
 

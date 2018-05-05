@@ -2,14 +2,15 @@
     <v-select :label="label" autocomplete return-object
               :items="items" :value="value" @input="update"
               item-text="nombre" item-value="id" :required="required"
-              :chips="chips" :multiple="multiple"></v-select>
+              :chips="chips" :multiple="multiple"
+              :disabled="disabled"></v-select>
 </template>
 
 <script>
   export default {
     name: 'lookup',
 
-    props: ['label', 'items', 'value', 'chips', 'multiple', 'required'],
+    props: ['label', 'items', 'value', 'chips', 'multiple', 'required', 'disabled'],
 
     methods: {
       update (newValue) {

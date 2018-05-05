@@ -4,6 +4,24 @@ import { extractEmbedded, prefix } from './helpers'
 console.log(prefix)
 
 export default {
+  async antecedentes () {
+    const {data} = await axios.get(`${prefix}/antecedente`)
+
+    return extractEmbedded('antecedentes', data)
+  },
+
+  async antecedenteCategorias () {
+    const {data} = await axios.get(`${prefix}/antecedenteCategoria`)
+
+    return extractEmbedded('antecedenteCategorias', data)
+  },
+
+  async atencionTipos () {
+    const {data} = await axios.get(`${prefix}/atencionTipo`)
+
+    return extractEmbedded('atencionTipos', data)
+  },
+
   async barrios () {
     const {data} = await axios.get(`${prefix}/barrio?size=500`)
 
@@ -14,6 +32,36 @@ export default {
     const {data} = await axios.get(`${prefix}/departamento/${departamentoId}/ciudades?size=100`)
 
     return extractEmbedded('ciudades', data)
+  },
+
+  async cajasCompensacion () {
+    const {data} = await axios.get(`${prefix}/caja-compensacion?size=100`)
+
+    return extractEmbedded('cajasCompensacion', data)
+  },
+
+  async cifCategorias (componenteId) {
+    const {data} = await axios.get(`${prefix}/cifComponente/${componenteId}/categorias?projection=completo`)
+
+    return extractEmbedded('cifCategorias', data)
+  },
+
+  async cifComponentes () {
+    const {data} = await axios.get(`${prefix}/cifcomponente?size=100`)
+
+    return extractEmbedded('cifcomponentes', data)
+  },
+
+  async cifItems () {
+    const {data} = await axios.get(`${prefix}/cifitem?size=100`)
+
+    return extractEmbedded('cifitems', data)
+  },
+
+  async cies () {
+    const {data} = await axios.get(`${prefix}/cie?size=3888`)
+
+    return extractEmbedded('cies', data)
   },
 
   async departamentos () {
@@ -32,6 +80,12 @@ export default {
     const {data} = await axios.get(`${prefix}/tipoDocumento`)
 
     return extractEmbedded('tiposDocumento', data)
+  },
+
+  async epses () {
+    const {data} = await axios.get(`${prefix}/eps`)
+
+    return extractEmbedded('EPSes', data)
   },
 
   async escolaridades () {
@@ -88,6 +142,11 @@ export default {
 
     return extractEmbedded('ocupaciones', data)
   },
+  async origenes () {
+    const {data} = await axios.get(`${prefix}/origen`)
+
+    return extractEmbedded('origenes', data)
+  },
 
   async pensiones () {
     const {data} = await axios.get(`${prefix}/pension`)
@@ -99,6 +158,12 @@ export default {
     const {data} = await axios.get(`${prefix}/programa`)
 
     return extractEmbedded('programas', data)
+  },
+
+  async religiones () {
+    const {data} = await axios.get(`${prefix}/religion`)
+
+    return extractEmbedded('religiones', data)
   },
 
   async remitentes () {
