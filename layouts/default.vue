@@ -9,19 +9,43 @@
             <v-list>
                 <template v-for="item in items">
                     <v-divider v-if="item.icon && item.id !== 1"></v-divider>
-                    <v-list-tile
-                            router
-                            :to="item.to"
-                            :key="item.id"
-                            :exact="item.exact"
-                            :disabled="item.disabled">
-                        <v-list-tile-action>
-                            <v-icon v-html="item.icon" v-if="item.icon"></v-icon>
-                        </v-list-tile-action>
-                        <v-list-tile-content>
-                            <v-list-tile-title v-text="item.title"></v-list-tile-title>
-                        </v-list-tile-content>
-                    </v-list-tile>
+                    <template v-if="item.subItems">
+                        <v-list-group :prepend-icon="item.icon" :value="false"
+                                      :disabled="item.disabled">
+                            <v-list-tile slot="activator">
+                                <v-list-tile-title>{{item.title}}</v-list-tile-title>
+                            </v-list-tile>
+                            <template v-for="subItem in item.subItems">
+                                <v-list-tile
+                                        router
+                                        :to="subItem.to"
+                                        :key="subItem.id"
+                                        :exact="subItem.exact">
+                                    <v-list-tile-action>
+                                        <v-icon v-html="subItem.icon" v-if="subItem.icon"></v-icon>
+                                    </v-list-tile-action>
+                                    <v-list-tile-content>
+                                        <v-list-tile-title v-text="subItem.title"></v-list-tile-title>
+                                    </v-list-tile-content>
+                                </v-list-tile>
+                            </template>
+                        </v-list-group>
+                    </template>
+                    <template v-else>
+                        <v-list-tile
+                                router
+                                :to="item.to"
+                                :key="item.id"
+                                :exact="item.exact"
+                                :disabled="item.disabled">
+                            <v-list-tile-action>
+                                <v-icon v-html="item.icon" v-if="item.icon"></v-icon>
+                            </v-list-tile-action>
+                            <v-list-tile-content>
+                                <v-list-tile-title v-text="item.title"></v-list-tile-title>
+                            </v-list-tile-content>
+                        </v-list-tile>
+                    </template>
                 </template>
                 <v-divider></v-divider>
             </v-list>
@@ -120,9 +144,21 @@
             {id: 41, title: 'Familia', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/familia`},
             {id: 42, title: 'Ocupacion', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/ocupacion`},
             {id: 43, title: 'Ingresos', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/ingresos`},
-            {id: 44, title: 'Securidad Social', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/seguridad-social`},
-            {id: 45, title: 'Aspecto Laboral', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/aspecto-laboral`},
-            {id: 46, title: 'Aspecto Psicologico', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/aspecto-psicologico`},
+            {
+              id: 44,
+              title: 'Securidad Social',
+              to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/seguridad-social`
+            },
+            {
+              id: 45,
+              title: 'Aspecto Laboral',
+              to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/aspecto-laboral`
+            },
+            {
+              id: 46,
+              title: 'Aspecto Psicologico',
+              to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/aspecto-psicologico`
+            },
             {id: 47, title: 'Contacto', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/contacto`},
             {id: 48, title: 'Aspecto Médico', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/medico`}
           )
@@ -137,9 +173,9 @@
             title: 'Evaluacion',
             to: `/usuario/${usuario && usuario.id}/evaluacion/${evaluacion && evaluacion.id}`,
             disabled: !evaluacion,
-            exact: false
+            exact: false,
+            subItems
           },
-          ...subItems,
           {id: 5, icon: 'widgets', title: 'Administración', to: '/admin', exact: true},
           {id: 6, icon: 'widgets', title: 'Aula Pedagogica', to: '/aula', exact: true},
           {id: 7, icon: 'widgets', title: 'Deportes', to: '/deporte', exact: true},
