@@ -141,6 +141,7 @@
 
         if (usuario && evaluacion) {
           subItems.push(
+            {id: 40, title: 'Inicio', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}`},
             {id: 41, title: 'Familia', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/familia`},
             {id: 42, title: 'Ocupacion', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/ocupacion`},
             {id: 43, title: 'Ingresos', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/ingresos`},

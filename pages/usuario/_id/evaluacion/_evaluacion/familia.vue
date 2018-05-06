@@ -49,8 +49,9 @@
 
                     <v-card-actions>
                         <v-btn flat @click="guarda()" color="blue">Guardar</v-btn>
-                        <v-btn flat color="red" :to="`/usuario/${$route.params.id}/evaluacion/${$route.params.evaluacion}`">
-Cerrar
+                        <v-btn flat color="red" exact
+                               :to="`/usuario/${$route.params.id}/evaluacion/${$route.params.evaluacion}`">
+                            Cerrar
                         </v-btn>
                     </v-card-actions>
                 </v-card>

@@ -18,8 +18,8 @@
                 class="elevation-1">
             <template slot="items" slot-scope="props">
                 <td class="lookup__id">{{props.item.id}}</td>
-                <td class="lookup__nombre">
-                    <v-btn flat @click="changeUsuario(props.item)">{{props.item.nombre}}</v-btn>
+                <td class="lookup__nombre" @click="changeUsuario(props.item)" role="button">
+                    {{props.item.nombre}}
                 </td>
                 <td class="lookup__documento">{{props.item.documento}}</td>
             </template>

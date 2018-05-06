@@ -61,6 +61,7 @@
                         </template>
 
                     </td>
+
                     <td class="justify-center layout px-0">
                         <v-btn icon class="mx-0" @click="editItem(props.item)">
                             <v-icon color="teal">edit</v-icon>
@@ -129,6 +130,8 @@
       date: moment().format('YYYY-MM-DD'),
 
       menu: false,
+
+      dialog: false,
 
       formTitle: '',
 

@@ -21,7 +21,11 @@ class EvaluacionService {
       .getResource()
       .resultWithTraversal()
 
-    return traverse(traversal, result, 'plan', 'aspiracion', 'remitente', 'usuario', 'evaluador')
+    const full = await traverse(traversal, result, 'plan', 'aspiracion', 'remitente', 'usuario', 'evaluador')
+
+    console.log(full)
+
+    return full
   }
 
   async readEvaluacionSalud (evaluacionId) {
