@@ -15,6 +15,7 @@
     "axios": "^0.18.0",
     "moment": "^2.22.0",
     "nuxt": "^1.0.0",
+    "rxjs": "^5",
     "traverson": "^6.0.3",
     "traverson-hal": "^6.0.0",
     "traverson-promise": "^0.0.9",

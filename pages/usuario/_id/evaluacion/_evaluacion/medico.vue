@@ -44,6 +44,7 @@
                     class="elevation-1">
                 <template slot="items" slot-scope="props">
                     <td>{{ props.item.discapacidad.nombre }}</td>
+
                     <td class="justify-center">
                         <template v-if="props.item.valor">
                             {{props.item.valor.congenita ? 'Congénita' : 'Adquirida'}}
@@ -52,6 +53,7 @@
                             Ninguna
                         </template>
                     </td>
+
                     <td class="text-xs-right">
                         <template v-if="props.item.valor">
                             {{formatDate(props.item.valor.adquisicion)}}
@@ -70,14 +72,26 @@
                             <v-icon color="pink">delete</v-icon>
                         </v-btn>
                     </td>
-
                 </template>
+
                 <template slot="no-data">
                     <v-btn color="primary" @click="initialize">Reset</v-btn>
                 </template>
             </v-data-table>
 
+            <v-card-text>
+                <a-cie label="Diagnostico" v-model="modelo.diagnostico"></a-cie>
+
+                <a-cie label="Enfermedades Familiares" v-model="modelo.familiar"></a-cie>
+
+                <v-text-field label="Recomendaciones Médicas" multi-line
+                              v-model="modelo.recomendaciones"></v-text-field>
+
+                <v-text-field label="Sinopsis" multi-line v-model="modelo.sinopsis"></v-text-field>
+            </v-card-text>
+
             <v-card-actions>
+                <v-btn flat exact color="blue" @click="guarda()">Guarda</v-btn>
                 <v-btn flat exact color="red"
                        :to="`/usuario/${$route.params.id}/evaluacion/${$route.params.evaluacion}`">
                     Cerrar
@@ -86,15 +100,28 @@
         </v-card>
 
         <br>
-        <a-categoria id="1"></a-categoria>
-        <br>
-        <a-categoria id="2"></a-categoria>
-        <br>
-        <a-categoria id="3"></a-categoria>
-        <br>
-        <a-categoria id="4"></a-categoria>
-        <br>
-        <a-categoria id="5"></a-categoria>
+        <v-tabs v-model="activeTab">
+            <v-tab ripple key="1">
+                Funciones Corporales
+            </v-tab>
+            <v-tab-item key="1">
+                <a-categoria id="1"></a-categoria>
+            </v-tab-item>
+
+            <v-tab ripple key="2">
+                Estructuras Corporales
+            </v-tab>
+            <v-tab-item key="2">
+                <a-categoria id="2"></a-categoria>
+            </v-tab-item>
+
+            <v-tab ripple key="3">
+                Actividades
+            </v-tab>
+            <v-tab-item key="3">
+                <a-categoria id="3"></a-categoria>
+            </v-tab-item>
+        </v-tabs>
     </v-container>
 </template>
 
@@ -103,28 +130,29 @@
   import lookup from '~/services/lookup'
   import evaluacionService from '~/services/evaluacion'
   import calendar from '~/components/calendar'
-  import ACategoria from '../../../../../components/categoria'
 
   export default {
     name: 'medico',
 
     components: {
-      ACategoria,
       calendar
     },
 
     async asyncData ({params}) {
       const evaluacionDiscapacidades = await evaluacionService.evaluacionDiscapacidades(params.evaluacion)
-      let discapacidadList = await lookup.discapacidades()
+      const discapacidadList = await lookup.discapacidades()
+      const modelo = await evaluacionService.evaluacionMedico(params.evaluacion)
 
       return {
         discapacidadList,
         evaluacionDiscapacidades,
-        modelo: {}
+        modelo
       }
     },
 
     data: () => ({
+      activeTab: '0',
+
       today: moment().format('YYYY-MM-DD'),
 
       date: moment().format('YYYY-MM-DD'),
@@ -134,6 +162,10 @@
       dialog: false,
 
       formTitle: '',
+
+      enfermedades: [],
+
+      diagnostico: [],
 
       headers: [
         {text: 'Discapacidad', value: 'discapacidad'},
@@ -246,6 +278,14 @@
         }
 
         this.close()
+      },
+
+      async guarda () {
+        if (this.modelo.id === -1) {
+          this.modelo = await evaluacionService.agregaMedico(this.$route.params.evaluacion, this.modelo)
+        } else {
+          this.modelo = await evaluacionService.guardaMedico(this.modelo)
+        }
       }
     }
   }

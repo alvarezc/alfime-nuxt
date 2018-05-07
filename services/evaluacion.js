@@ -331,6 +331,72 @@ class EvaluacionService {
 
     return atencion
   }
+
+  async evaluacionMedico (evaluacionId) {
+    try {
+      const result = await traverson
+        .from(`${prefix}/evaluacionMedico/${evaluacionId}`)
+        .jsonHal()
+        .withRequestOptions({qs: {projection: 'completo'}})
+        .getResource()
+        .result
+
+      return result
+    } catch (e) {
+      return {
+        id: -1,
+        familiar: [],
+        diagnostico: [],
+        recomendaciones: null,
+        sinopsis: null
+      }
+    }
+  }
+
+  async guardaMedico ({id, familiar, diagnostico, recomendaciones, sinopsis}) {
+    const {traversal} = await traverson
+      .from(`${prefix}/evaluacionMedico/${id}`)
+      .jsonHal()
+      .convertResponseToObject()
+      .patch({
+        recomendaciones,
+        sinopsis,
+        familiar: familiar
+          .map(item => item._links ? item._links.self.href : `${prefix}/CIE/${item.id}`),
+        diagnostico: diagnostico
+          .map(item => item._links ? item._links.self.href : `${prefix}/CIE/${item.id}`)
+      })
+      .resultWithTraversal()
+
+    return traversal.continue().follow('evaluacionMedico')
+      .withTemplateParameters({projection: 'completo'})
+      .getResource()
+      .result
+  }
+
+  async agregaMedico (evaluacionId, {id, ...medico}) {
+    medico.diagnostico = medico.diagnostico.map(item => item._links.self.href)
+    medico.familiar = medico.familiar.map(item => item._links.self.href)
+
+    const {traversal} = await traverson
+      .from(`${prefix}/evaluacionMedico`)
+      .jsonHal()
+      .convertResponseToObject()
+      .post(
+        cleanSelf({
+          evaluacion: `${prefix}/evaluacion/${evaluacionId}`,
+          ...medico
+        })
+      )
+      .resultWithTraversal()
+
+    return traversal
+      .continue()
+      .follow('evaluacionMedico')
+      .withTemplateParameters({projection: 'completo'})
+      .getResource()
+      .result
+  }
 }
 
 const evaluacionService = new EvaluacionService()
