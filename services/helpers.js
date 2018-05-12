@@ -69,6 +69,7 @@ export async function fetchLinks (result, ...keys) {
 
                   result[key] = keys.length ? arrays[keys[0]].map(item => item.original()) : parsed.original()
                 })
+                .catch(() => null)
               : (result[key] = parsed.embedded(key))
           })
       )

@@ -43,16 +43,15 @@ export const mutations = {
       {id: 47, title: 'Contacto', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/contacto`},
       {id: 41, title: 'Familia', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/familia`},
       {id: 42, title: 'Ocupacion', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/ocupacion`},
-      {id: 43, title: 'Ingresos', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/ingresos`},
       {
         id: 44,
-        title: 'Securidad Social',
+        title: 'Seguridad Social',
         to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/seguridad-social`
       },
       {id: 48, title: 'Aspecto Médico', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/medico`},
       {
         id: 46,
-        title: 'Aspecto Psicologico',
+        title: 'Aspecto Psicológico',
         to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/aspecto-psicologico`
       }
     ]

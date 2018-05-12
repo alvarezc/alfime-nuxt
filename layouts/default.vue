@@ -10,7 +10,7 @@
                 <template v-for="item in items">
                     <v-divider v-if="item.icon && item.id !== 1"></v-divider>
                     <template v-if="item.subItems">
-                        <v-list-group :prepend-icon="item.icon" :value="false"
+                        <v-list-group :prepend-icon="item.icon" :value="true"
                                       :disabled="item.disabled">
                             <v-list-tile slot="activator">
                                 <v-list-tile-title>{{item.title}}</v-list-tile-title>

@@ -71,10 +71,6 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
-
-        <v-card-actions>
-            <v-btn flat color="red" exact :to="`/usuario/${$route.params.id}/evaluacion/${$route.params.evaluacion}`">Cerrar</v-btn>
-        </v-card-actions>
     </v-card>
 </template>
 
@@ -83,22 +79,25 @@
   import lookupService from '~/services/lookup'
 
   export default {
-    name: 'ingresos',
+    name: 'AIngresos',
 
-    async asyncData ({params}) {
-      const evaluacionIngresos = await evaluacionService.evaluacionIngresos(params.evaluacion)
-      const ingresosList = await lookupService.ingresos()
-      const frecuencias = await lookupService.frecuencias()
-
-      return {
-        ingresosList,
-        evaluacionIngresos,
-        frecuencias
+    props: {
+      evaluacionId: {
+        required: true,
+        type: String
       }
+    },
+
+    mounted () {
+      this.initialize(this.evaluacionId)
     },
 
     data () {
       return {
+        ingresosList: [],
+        evaluacionIngresos: [],
+        frecuencias: [],
+
         headers: [
           {text: 'ID', value: 'ingreso.id'},
           {text: 'Nombre', value: 'ingreso.nombre'},
@@ -144,6 +143,12 @@
     },
 
     methods: {
+      async initialize (evaluacionId) {
+        this.evaluacionIngresos = await evaluacionService.evaluacionIngresos(evaluacionId)
+        this.ingresosList = await lookupService.ingresos()
+        this.frecuencias = await lookupService.frecuencias()
+      },
+
       editItem ({ingreso, valor}) {
         this.dialog = true
         this.editedItem = {
