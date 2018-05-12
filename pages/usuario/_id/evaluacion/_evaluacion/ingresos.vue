@@ -4,6 +4,7 @@
             <div class="headline">Ingresos</div>
         </v-card-title>
         <v-data-table
+                hide-actions
                 :items="ingresos"
                 :headers="headers">
             <template slot="items" slot-scope="props">

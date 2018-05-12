@@ -54,7 +54,9 @@
     },
 
     created () {
-      this.updateEvaluacion({id: this.evaluacionId})
+      if (this.evaluacionId) {
+        this.updateEvaluacion({id: this.evaluacionId})
+      }
     }
   }
 </script>
