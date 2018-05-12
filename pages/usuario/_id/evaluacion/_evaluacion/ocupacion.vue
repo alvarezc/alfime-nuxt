@@ -1,35 +1,79 @@
 <template>
-    <v-card>
-        <v-card-title primary-title>
-            <div class="headline">Evaluación</div>
-        </v-card-title>
+    <v-tabs v-model="activeTab">
+        <v-tab ripple key="1">
+            Ocupacion
+        </v-tab>
 
-        <v-card-text>
-            <v-text-field label="Rutina Diaria" multi-line v-model="modelo.rutinaDiaria"></v-text-field>
+        <v-tab-item key="1">
+            <v-card flat>
+                <v-card-text>
+                    <v-text-field label="Rutina Diaria" multi-line v-model="modelo.rutinaDiaria"></v-text-field>
 
-            <v-text-field label="Actividades de tiempo libre" multi-line
-                          v-model="modelo.actividadesTiempoLibre"></v-text-field>
+                    <v-text-field label="Actividades de tiempo libre" multi-line
+                                  v-model="modelo.actividadesTiempoLibre"></v-text-field>
 
-            <lookup :items="escolaridades" required
-                    label="Escolaridad" v-model="modelo.escolaridad"></lookup>
+                    <lookup :items="escolaridades" required
+                            label="Escolaridad" v-model="modelo.escolaridad"></lookup>
 
-            <lookup :items="ocupaciones" required
-                    label="Ocupación" v-model="modelo.ocupacion"></lookup>
+                    <lookup :items="ocupaciones" required
+                            label="Ocupación" v-model="modelo.ocupacion"></lookup>
 
-            <v-text-field required maxlength="100" counter="100"
-                          label="Actividad Económica" v-model="modelo.actividadEconomica"></v-text-field>
+                    <v-text-field required maxlength="100" counter="100"
+                                  label="Actividad Económica" v-model="modelo.actividadEconomica"></v-text-field>
 
-            <v-text-field label="Empresa" v-model="modelo.empresa" maxlength="100"></v-text-field>
+                    <v-text-field label="Empresa" v-model="modelo.empresa" maxlength="100"></v-text-field>
 
-            <v-text-field label="Teléfono" v-model="modelo.telefono" maxlength="20"></v-text-field>
+                    <v-text-field label="Teléfono" v-model="modelo.telefono" maxlength="20"></v-text-field>
 
-        </v-card-text>
+                </v-card-text>
 
-        <v-card-actions>
-            <v-btn @click="guarda()" color="blue" flat>Guardar</v-btn>
-            <v-btn :to="`/usuario/${$route.params.id}/evaluacion/${$route.params.evaluacion}`" flat color="red">Close</v-btn>
-        </v-card-actions>
-    </v-card>
+                <v-card-actions>
+                    <v-btn @click="guarda()" color="blue" flat>Guardar</v-btn>
+                    <v-btn :to="`/usuario/${$route.params.id}/evaluacion/${$route.params.evaluacion}`" exact flat
+                           color="red">
+                        Close
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-tab-item>
+
+        <v-tab ripple key="2">
+            Aspecto Laboral
+        </v-tab>
+
+        <v-tab-item key="2">
+            <v-card flat>
+                <v-card-text>
+                    <v-text-field label="Tareas que ha desempeñado" v-model="modelo.tareas" multi-line></v-text-field>
+
+                    <v-text-field label="Expectativas laborales" v-model="modelo.expectativas" multi-line></v-text-field>
+
+                    <v-checkbox label="Ha soñado con vivir solo"
+                            v-model="modelo.actitud1"></v-checkbox>
+
+                    <v-checkbox label="Ha soñado terminar una carrera universitaria"
+                            v-model="modelo.actitud2"></v-checkbox>
+
+                    <v-checkbox label="Ha soñado con tener su propio trabajo o ser independiente"
+                            v-model="modelo.actitud3"></v-checkbox>
+
+                    <v-checkbox label="Ha soñado con tener su propio negocio"
+                            v-model="modelo.actitud4"></v-checkbox>
+
+                    <v-text-field label="Que ha soñado hacer y ha sido impedido por la discapacidad"
+                                  v-model="modelo.aspiraciones" multi-line></v-text-field>
+                </v-card-text>
+
+                <v-card-actions>
+                    <v-btn @click="guarda()" color="blue" flat>Guardar</v-btn>
+                    <v-btn :to="`/usuario/${$route.params.id}/evaluacion/${$route.params.evaluacion}`" exact flat
+                           color="red">
+                        Close
+                    </v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-tab-item>
+    </v-tabs>
 </template>
 
 <script>
@@ -56,6 +100,12 @@
         modelo,
         escolaridades,
         ocupaciones
+      }
+    },
+
+    data () {
+      return {
+        activeTab: '0'
       }
     },
 

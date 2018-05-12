@@ -1,11 +1,12 @@
 <template>
     <v-container fluid grid-list-md>
-        <v-layout row wrap>
-            <v-flex xs12>
-                <v-card>
-                    <v-card-title primary-title="">
-                        <div class="headline">Familia</div>
-                    </v-card-title>
+        <v-tabs v-model="activeTab">
+            <v-tab key="1">
+                Familia
+            </v-tab>
+
+            <v-tab-item key="1">
+                <v-card flat>
                     <v-card-text>
                         <lookup :items="familiaTipos" required
                                 label="Tipo de Familia" v-model="modelo.familiaTipo"></lookup>
@@ -24,9 +25,17 @@
 
                         <v-text-field label="Nombre de la Madre" v-model="modelo.madreNombre"
                                       maxlength="100"></v-text-field>
+                    </v-card-text>
+                </v-card>
+            </v-tab-item>
 
-                        <h3>Actitud de la familia</h3>
+            <v-tab key="2">
+                Actitud Familiar
+            </v-tab>
 
+            <v-tab-item key="2">
+                <v-card flat>
+                    <v-card-text>
                         <v-switch label="La familia es conciente de las limitaciones del usuario?"
                                   v-model="modelo.actitud1"></v-switch>
                         <v-switch label="La familia ayuda en las necesidades generales del usuario?"
@@ -44,25 +53,16 @@
 
                         <v-text-field label="Actividades familiares recreativas" multi-line
                                       v-model="modelo.actividadesRecreativas"></v-text-field>
-
                     </v-card-text>
-
-                    <v-card-actions>
-                        <v-btn flat @click="guarda()" color="blue">Guardar</v-btn>
-                        <v-btn flat color="red" exact
-                               :to="`/usuario/${$route.params.id}/evaluacion/${$route.params.evaluacion}`">
-                            Cerrar
-                        </v-btn>
-                    </v-card-actions>
                 </v-card>
-            </v-flex>
+            </v-tab-item>
 
-            <v-flex xs12>
-                <v-card>
-                    <v-card-title>
-                        <div class="headline">Otros Familiares</div>
-                    </v-card-title>
+            <v-tab key="3">
+                Otros Familiares
+            </v-tab>
 
+            <v-tab-item key="3">
+                <v-card flat>
                     <v-card-text>
                         <v-data-table :headers="headers"
                                       :items="familiares"
@@ -135,8 +135,18 @@
                         </v-dialog>
                     </v-card-text>
                 </v-card>
-            </v-flex>
-        </v-layout>
+            </v-tab-item>
+        </v-tabs>
+
+        <v-card flat>
+            <v-card-actions>
+                <v-btn flat @click="guarda()" color="blue">Guardar</v-btn>
+                <v-btn flat color="red" exact
+                       :to="`/usuario/${$route.params.id}/evaluacion/${$route.params.evaluacion}`">
+                    Cerrar
+                </v-btn>
+            </v-card-actions>
+        </v-card>
     </v-container>
 </template>
 
@@ -175,6 +185,8 @@
 
     data () {
       return {
+        activeTab: '0',
+
         model: {
           familiaTipo: null,
           calidadRelaciones: '',

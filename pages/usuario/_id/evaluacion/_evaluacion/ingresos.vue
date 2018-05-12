@@ -72,7 +72,7 @@
         </v-dialog>
 
         <v-card-actions>
-            <v-btn flat color="red" :to="`/usuario/${$route.params.id}/evaluacion/${$route.params.evaluacion}`">Cerrar</v-btn>
+            <v-btn flat color="red" exact :to="`/usuario/${$route.params.id}/evaluacion/${$route.params.evaluacion}`">Cerrar</v-btn>
         </v-card-actions>
     </v-card>
 </template>
