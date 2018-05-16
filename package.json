@@ -20,7 +20,10 @@
     "traverson-hal": "^6.0.0",
     "traverson-promise": "^0.0.9",
     "urijs": "^1.19.1",
-    "vuetify": "^1.0.0",
+    "vue": "^2.5.0",
+    "vue-form-generator": "^2.2.2",
+    "vuetify": "^1.0.18",
+    "vuex": "^3.0.0",
     "vuex-persistedstate": "^2.5.2"
   },
   "devDependencies": {
@@ -35,9 +38,5 @@
     "eslint-plugin-standard": "^3.0.1",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1"
-  },
-  "peerDependencies": {
-    "vue": "^2.0.0",
-    "vuex": "^3.0.0"
   }
 }
