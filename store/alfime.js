@@ -42,6 +42,7 @@ export const mutations = {
       {id: 40, title: 'Inicio', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}`, exact: true},
       {id: 47, title: 'Contacto', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/contacto`},
       {id: 41, title: 'Familia', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/familia`},
+      {id: 43, title: 'Vivienda', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/vivienda`},
       {id: 42, title: 'Ocupacion', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/ocupacion`},
       {
         id: 44,

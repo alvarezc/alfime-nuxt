@@ -397,6 +397,73 @@ class EvaluacionService {
       .getResource()
       .result
   }
+
+  async evaluacionVivienda (evaluacionId) {
+    try {
+      const result = await traverson
+        .from(`${prefix}/evaluacionVivienda/${evaluacionId}`)
+        .jsonHal()
+        .withRequestOptions({qs: {projection: 'completo'}})
+        .getResource()
+        .result
+
+      return result
+    } catch (e) {
+      return {
+        id: -1,
+        tipo: {id: 1, self: {href: 'http://localhost:3000/api/viviendaTipo/1'}},
+        estrato: 1,
+        dormitorios: 0,
+        techo: {id: 6, self: {href: 'http://localhost:3000/api/viviendaMaterial/6'}},
+        piso: {id: 10, self: {href: 'http://localhost:3000/api/viviendaMaterial/10'}},
+        pared: {id: 1, self: {href: 'http://localhost:3000/api/viviendaMaterial/1'}},
+        evaluacion: {id: evaluacionId, self: {href: `http://localhost:3000/api/evaluacion/${evaluacionId}`}},
+        mobiliario: []
+      }
+    }
+  }
+
+  async guardaVivienda ({id, familiar, diagnostico, recomendaciones, sinopsis}) {
+    const {traversal} = await traverson
+      .from(`${prefix}/evaluacionVivienda/${id}`)
+      .jsonHal()
+      .convertResponseToObject()
+      .patch({
+        recomendaciones,
+        sinopsis,
+        familiar: familiar
+          .map(item => item._links ? item._links.self.href : `${prefix}/CIE/${item.id}`),
+        diagnostico: diagnostico
+          .map(item => item._links ? item._links.self.href : `${prefix}/CIE/${item.id}`)
+      })
+      .resultWithTraversal()
+
+    return traversal.continue().follow('evaluacionVivienda')
+      .withTemplateParameters({projection: 'completo'})
+      .getResource()
+      .result
+  }
+
+  async agregaVivienda (evaluacionId, {id, ...vivienda}) {
+    const {traversal} = await traverson
+      .from(`${prefix}/evaluacionVivienda`)
+      .jsonHal()
+      .convertResponseToObject()
+      .post(
+        cleanSelf({
+          evaluacion: `${prefix}/evaluacion/${evaluacionId}`,
+          ...cleanSelf(vivienda)
+        })
+      )
+      .resultWithTraversal()
+
+    return traversal
+      .continue()
+      .follow('evaluacionVivienda')
+      .withTemplateParameters({projection: 'completo'})
+      .getResource()
+      .result
+  }
 }
 
 const evaluacionService = new EvaluacionService()

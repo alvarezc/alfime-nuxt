@@ -1,7 +1,11 @@
 import axios from 'axios'
 import { extractEmbedded, prefix } from './helpers'
 
-console.log(prefix)
+const viviendaMaterial = async (id) => {
+  const {data} = await axios.get(`${prefix}/viviendaMaterial/search/findAllBySeccion?seccionId=${id}`)
+
+  return extractEmbedded('viviendaMateriales', data)
+}
 
 export default {
   async antecedentes () {
@@ -182,5 +186,29 @@ export default {
     const {data} = await axios.get(`${prefix}/responsabilidad`)
 
     return extractEmbedded('responsabilidades', data)
+  },
+
+  async viviendaMobiliarios () {
+    const {data} = await axios.get(`${prefix}/viviendaMobiliario`)
+
+    return extractEmbedded('viviendaMobiliarios', data)
+  },
+
+  async viviendaParedes () {
+    return viviendaMaterial(1)
+  },
+
+  async viviendaPisos () {
+    return viviendaMaterial(3)
+  },
+
+  async viviendaTechos () {
+    return viviendaMaterial(2)
+  },
+
+  async viviendaTipos () {
+    const {data} = await axios.get(`${prefix}/viviendaTipo`)
+
+    return extractEmbedded('viviendaTipos', data)
   }
 }
