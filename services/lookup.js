@@ -188,6 +188,10 @@ export default {
     return extractEmbedded('responsabilidades', data)
   },
 
+  async viviendaCalidad () {
+    return viviendaMaterial(4)
+  },
+
   async viviendaMobiliarios () {
     const {data} = await axios.get(`${prefix}/viviendaMobiliario`)
 

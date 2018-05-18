@@ -2,6 +2,11 @@
     <v-container>
         <lookup :items="tipos" v-model="modelo.tipo" label="Tipo de Vivienda"></lookup>
 
+        <lookup :items="calidades" v-model="modelo.calidad" label="Calidad de la Vivienda"></lookup>
+
+        <v-text-field label="Calidad Otro" v-model="modelo.calidadOtro"
+                      :disabled="modelo.calidad && modelo.calidad.id === 14"></v-text-field>
+
         <v-subheader>Estrato</v-subheader>
 
         <v-layout row>
@@ -53,6 +58,7 @@
         techos: await lookupService.viviendaTechos(),
         pisos: await lookupService.viviendaPisos(),
         tipos: await lookupService.viviendaTipos(),
+        calidades: await lookupService.viviendaCalidad(),
         mobiliarios: await lookupService.viviendaMobiliarios(),
         modelo: await evaluacionService.evaluacionVivienda(params.evaluacion)
       }

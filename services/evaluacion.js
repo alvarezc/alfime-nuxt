@@ -418,6 +418,8 @@ class EvaluacionService {
         piso: {id: 10, self: {href: 'http://localhost:3000/api/viviendaMaterial/10'}},
         pared: {id: 1, self: {href: 'http://localhost:3000/api/viviendaMaterial/1'}},
         evaluacion: {id: evaluacionId, self: {href: `http://localhost:3000/api/evaluacion/${evaluacionId}`}},
+        calidad: {id: 14, self: {href: 'http://localhost:3000/api/viviendaMaterial/14'}},
+        calidadOtro: '',
         mobiliario: []
       }
     }

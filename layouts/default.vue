@@ -108,7 +108,7 @@
 
 <script>
   import usuarioService from '~/services/usuario'
-  import { mapState } from 'vuex'
+  import { mapState, mapMutations } from 'vuex'
 
   export default {
     data () {
@@ -124,12 +124,26 @@
       }
     },
 
+    created () {
+      const alfime = this.$store.state.alfime
+
+      console.log(alfime)
+
+      if (!(alfime.items && alfime.items.length)) {
+        this.updateUsuario(null)
+      }
+    },
+
     methods: {
       async search () {
         const usuario = await usuarioService.find(this.cedula)
 
         this.$nuxt.$router.push(`/usuario/${usuario.id}`)
-      }
+      },
+
+      ...mapMutations({
+        updateUsuario: 'alfime/updateUsuario'
+      })
     },
 
     computed: {
