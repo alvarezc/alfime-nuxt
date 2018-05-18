@@ -7,45 +7,9 @@
                 fixed
                 app>
             <v-list>
-                <template v-for="item in items">
+                <template v-for="item in itemList">
                     <v-divider v-if="item.icon && item.id !== 1"></v-divider>
-                    <template v-if="item.subItems">
-                        <v-list-group :prepend-icon="item.icon" :value="true"
-                                      :disabled="item.disabled">
-                            <v-list-tile slot="activator">
-                                <v-list-tile-title>{{item.title}}</v-list-tile-title>
-                            </v-list-tile>
-                            <template v-for="subItem in item.subItems">
-                                <v-list-tile
-                                        router
-                                        :to="subItem.to"
-                                        :key="subItem.id"
-                                        :exact="subItem.exact">
-                                    <v-list-tile-action>
-                                        <v-icon v-html="subItem.icon" v-if="subItem.icon"></v-icon>
-                                    </v-list-tile-action>
-                                    <v-list-tile-content>
-                                        <v-list-tile-title v-text="subItem.title"></v-list-tile-title>
-                                    </v-list-tile-content>
-                                </v-list-tile>
-                            </template>
-                        </v-list-group>
-                    </template>
-                    <template v-else>
-                        <v-list-tile
-                                router
-                                :to="item.to"
-                                :key="item.id"
-                                :exact="item.exact"
-                                :disabled="item.disabled">
-                            <v-list-tile-action>
-                                <v-icon v-html="item.icon" v-if="item.icon"></v-icon>
-                            </v-list-tile-action>
-                            <v-list-tile-content>
-                                <v-list-tile-title v-text="item.title"></v-list-tile-title>
-                            </v-list-tile-content>
-                        </v-list-tile>
-                    </template>
+                    <component :is="item.subItems ? 'nav-sub-item' : 'nav-item'" :item="item"></component>
                 </template>
                 <v-divider></v-divider>
             </v-list>
@@ -74,32 +38,12 @@
             <v-spacer></v-spacer>
             <v-text-field label="Identificación..." hide-details v-model="cedula" single-line append-icon="search"
                           :append-icon-cb="search"></v-text-field>
-            <v-spacer></v-spacer>
-            <v-btn
-                    icon
-                    @click.stop="rightDrawer = !rightDrawer">
-                <v-icon>menu</v-icon>
-            </v-btn>
         </v-toolbar>
         <v-content>
             <v-container>
                 <nuxt/>
             </v-container>
         </v-content>
-        <v-navigation-drawer
-                temporary
-                :right="right"
-                v-model="rightDrawer"
-                fixed>
-            <v-list>
-                <v-list-tile @click.native="right = !right">
-                    <v-list-tile-action>
-                        <v-icon light>compare_arrows</v-icon>
-                    </v-list-tile-action>
-                    <v-list-tile-title>Switch drawer (click me)</v-list-tile-title>
-                </v-list-tile>
-            </v-list>
-        </v-navigation-drawer>
         <v-footer :fixed="fixed" app>
             <span>&copy; 2017-2018 Yuliana Castaño Isaza</span>
         </v-footer>
@@ -108,7 +52,25 @@
 
 <script>
   import usuarioService from '~/services/usuario'
-  import { mapState, mapMutations } from 'vuex'
+  import { mapGetters, mapMutations } from 'vuex'
+
+  export const items = [
+    {id: 1, icon: 'apps', title: 'Bienvenidos', to: '/', exact: true},
+    {id: 3, icon: 'perm_identity', title: 'Usuario', to: '/usuario', exact: true},
+    {
+      id: 4,
+      icon: 'assignment',
+      title: 'Evaluacion',
+      to: '/usuario/evaluacion',
+      disabled: true,
+      exact: false
+    },
+    {id: 5, icon: 'widgets', title: 'Administración', to: '/admin', exact: true},
+    {id: 6, icon: 'widgets', title: 'Aula Pedagogica', to: '/aula', exact: true},
+    {id: 7, icon: 'widgets', title: 'Deportes', to: '/deporte', exact: true},
+    {id: 8, icon: 'widgets', title: 'Fisioterapia', to: '/fisioterapia', exact: true},
+    {id: 9, icon: 'widgets', title: 'Psicologia', to: '/psicologia', exact: true}
+  ]
 
   export default {
     data () {
@@ -117,20 +79,8 @@
         drawer: true,
         fixed: false,
         miniVariant: false,
-        right: true,
-        rightDrawer: false,
         title: 'ALFIME',
         cedula: ''
-      }
-    },
-
-    created () {
-      const alfime = this.$store.state.alfime
-
-      console.log(alfime)
-
-      if (!(alfime.items && alfime.items.length)) {
-        this.updateUsuario(null)
       }
     },
 
@@ -147,10 +97,63 @@
     },
 
     computed: {
-      ...mapState({
-        usuario: state => state.alfime.usuario, // Namespaced property doesn't work
-        evaluacion: state => state.alfime.evaluacion, // Namespaced property doesn't work
-        items: state => state.alfime.items
+      itemList: {
+        cache: false,
+        get () {
+          return items.map(item => {
+            const {id, icon, title, to, disabled, exact} = item
+
+            if (item.id === 4) {
+              const usuario = this.usuario
+              const evaluacion = this.evaluacion
+
+              let result = {
+                id,
+                icon,
+                title,
+                to,
+                disabled,
+                exact
+              }
+
+              if (evaluacion) {
+                result.disabled = false
+
+                const subItems = [
+                  {id: 40, title: 'Inicio', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}`, exact: true},
+                  {id: 47, title: 'Contacto', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/contacto`},
+                  {id: 41, title: 'Familia', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/familia`},
+                  {id: 43, title: 'Vivienda', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/vivienda`},
+                  {id: 42, title: 'Ocupacion', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/ocupacion`},
+                  {
+                    id: 44,
+                    title: 'Seguridad Social',
+                    to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/seguridad-social`
+                  },
+                  {id: 48, title: 'Aspecto Médico', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/medico`},
+                  {
+                    id: 46,
+                    title: 'Aspecto Psicológico',
+                    to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/aspecto-psicologico`
+                  }
+                ]
+
+                result.subItems = [...subItems]
+              }
+
+              return result
+            } else {
+              const result = {id, icon, title, to, disabled, exact}
+
+              return result
+            }
+          })
+        }
+      },
+
+      ...mapGetters({
+        evaluacion: 'alfime/getEvaluacion',
+        usuario: 'alfime/getUsuario'
       })
     }
   }

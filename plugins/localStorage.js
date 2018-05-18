@@ -3,6 +3,7 @@ import createPersistedState from 'vuex-persistedstate'
 export default ({store}) => {
   createPersistedState({
     key: 'alfime',
-    paths: []
+    paths: ['alfime'],
+    storage: sessionStorage
   })(store)
 }
