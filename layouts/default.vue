@@ -7,7 +7,7 @@
                 fixed
                 app>
             <v-list>
-                <template v-for="item in itemList">
+                <template v-for="item in getItemList()">
                     <v-divider v-if="item.icon && item.id !== 1"></v-divider>
                     <component :is="item.subItems ? 'nav-sub-item' : 'nav-item'" :item="item"></component>
                 </template>
@@ -52,7 +52,6 @@
 
 <script>
   import usuarioService from '~/services/usuario'
-  import { mapGetters, mapMutations } from 'vuex'
 
   export const items = [
     {id: 1, icon: 'apps', title: 'Bienvenidos', to: '/', exact: true},
@@ -80,7 +79,9 @@
         fixed: false,
         miniVariant: false,
         title: 'ALFIME',
-        cedula: ''
+        cedula: '',
+        usuarioId: null,
+        evaluacionId: null
       }
     },
 
@@ -91,69 +92,81 @@
         this.$nuxt.$router.push(`/usuario/${usuario.id}`)
       },
 
-      ...mapMutations({
-        updateUsuario: 'alfime/updateUsuario'
-      })
+      getItemList () {
+        return items.map(item => {
+          const {id, icon, title, to, disabled, exact} = item
+
+          if (item.id === 4) {
+            let result = {
+              id,
+              icon,
+              title,
+              to,
+              disabled,
+              exact
+            }
+
+            if (this.evaluacionId && this.usuarioId) {
+              result.disabled = false
+
+              const subItems = [
+                {
+                  id: 40,
+                  title: 'Inicio',
+                  to: `/usuario/${this.usuarioId}/evaluacion/${this.evaluacionId}`,
+                  exact: true
+                },
+                {id: 47, title: 'Contacto', to: `/usuario/${this.usuarioId}/evaluacion/${this.evaluacionId}/contacto`},
+                {id: 41, title: 'Familia', to: `/usuario/${this.usuarioId}/evaluacion/${this.evaluacionId}/familia`},
+                {id: 43, title: 'Vivienda', to: `/usuario/${this.usuarioId}/evaluacion/${this.evaluacionId}/vivienda`},
+                {
+                  id: 42,
+                  title: 'Ocupacion',
+                  to: `/usuario/${this.usuarioId}/evaluacion/${this.evaluacionId}/ocupacion`
+                },
+                {
+                  id: 44,
+                  title: 'Seguridad Social',
+                  to: `/usuario/${this.usuarioId}/evaluacion/${this.evaluacionId}/seguridad-social`
+                },
+                {
+                  id: 48,
+                  title: 'Aspecto Médico',
+                  to: `/usuario/${this.usuarioId}/evaluacion/${this.evaluacionId}/medico`
+                },
+                {
+                  id: 46,
+                  title: 'Aspecto Psicológico',
+                  to: `/usuario/${this.usuarioId}/evaluacion/${this.evaluacionId}/aspecto-psicologico`
+                }
+              ]
+
+              result.subItems = [...subItems]
+            }
+
+            return result
+          } else {
+            const result = {id, icon, title, to, disabled, exact}
+
+            return result
+          }
+        })
+      }
     },
 
-    computed: {
-      itemList: {
-        cache: false,
-        get () {
-          return items.map(item => {
-            const {id, icon, title, to, disabled, exact} = item
+    mounted () {
+      const state = this.$store.state
 
-            if (item.id === 4) {
-              const usuario = this.usuario
-              const evaluacion = this.evaluacion
+      this.usuarioId = state.alfime.usuario && state.alfime.usuario.id
+      this.evaluacionId = state.alfime.evaluacion && state.alfime.evaluacion.id
 
-              let result = {
-                id,
-                icon,
-                title,
-                to,
-                disabled,
-                exact
-              }
-
-              if (evaluacion) {
-                result.disabled = false
-
-                const subItems = [
-                  {id: 40, title: 'Inicio', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}`, exact: true},
-                  {id: 47, title: 'Contacto', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/contacto`},
-                  {id: 41, title: 'Familia', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/familia`},
-                  {id: 43, title: 'Vivienda', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/vivienda`},
-                  {id: 42, title: 'Ocupacion', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/ocupacion`},
-                  {
-                    id: 44,
-                    title: 'Seguridad Social',
-                    to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/seguridad-social`
-                  },
-                  {id: 48, title: 'Aspecto Médico', to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/medico`},
-                  {
-                    id: 46,
-                    title: 'Aspecto Psicológico',
-                    to: `/usuario/${usuario.id}/evaluacion/${evaluacion.id}/aspecto-psicologico`
-                  }
-                ]
-
-                result.subItems = [...subItems]
-              }
-
-              return result
-            } else {
-              const result = {id, icon, title, to, disabled, exact}
-
-              return result
-            }
-          })
-        }
-      },
-
-      ...mapGetters({
-        evaluacion: 'alfime/getEvaluacion',
-        usuario: 'alfime/getUsuario'
+      this.$store.watch(state => ({
+        usuarioId: state.alfime.usuario && state.alfime.usuario.id,
+        evaluacionId: state.alfime.evaluacion && state.alfime.evaluacion.id
+      }), (value) => {
+        this.usuarioId = value.usuarioId
+        this.evaluacionId = value.evaluacionId
+        console.log(`Usuario is now ${JSON.stringify(value)}`)
       })
     }
   }
