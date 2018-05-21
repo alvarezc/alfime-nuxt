@@ -1,66 +1,113 @@
 <template>
     <v-container>
-        <lookup :items="tipos" v-model="modelo.tipo" label="Tipo de Vivienda"></lookup>
-
-        <lookup :items="calidades" v-model="modelo.calidad" label="Calidad de la Vivienda"></lookup>
-
-        <v-text-field label="Calidad Otro" v-model="modelo.calidadOtro"
-                      :disabled="modelo.calidad && modelo.calidad.id === 14"></v-text-field>
-
-        <v-subheader>Estrato</v-subheader>
-
-        <v-layout row>
-            <v-flex xs10 sm11>
-                <v-slider :min="1" :max="6" v-model="modelo.estrato" thumb-label></v-slider>
-            </v-flex>
-
-            <v-flex xs2 sm1>
-                <v-text-field v-model="modelo.estrato" type="number" :max="6" :min="1"></v-text-field>
-            </v-flex>
-        </v-layout>
-
-        <v-subheader>Dormitorios</v-subheader>
-
-        <v-layout row>
-            <v-flex xs10 sm11>
-                <v-slider :min="0" :max="10" v-model="modelo.dormitorios" thumb-label></v-slider>
-            </v-flex>
-
-            <v-flex xs2 sm1>
-                <v-text-field v-model="modelo.dormitorios" type="number" :max="10" :min="0"></v-text-field>
-            </v-flex>
-        </v-layout>
-
-        <lookup :items="paredes" v-model="modelo.pared" label="Material de las Paredes"></lookup>
-
-        <lookup :items="techos" v-model="modelo.techo" label="Material de los Techos"></lookup>
-
-        <lookup :items="pisos" v-model="modelo.piso" label="Material de los Pisos"></lookup>
-
-        <lookup :items="mobiliarios" chips multiple label="Mobiliario"
-                v-model="modelo.mobiliario"></lookup>
-
-        <a-actions :to="`/usuario/${$route.params.id}/evaluacion/${$route.params.evaluacion}`"
-                   @guarda="guarda"></a-actions>
+        <a-formulario :to="`/usuario/${$route.params.id}/evaluacion/${$route.params.evaluacion}`"
+                      @guarda="guarda" :schema="schema" v-model="modelo"/>
     </v-container>
 </template>
 
 <script>
   import lookupService from '~/services/lookup'
   import evaluacionService from '~/services/evaluacion'
+  import AFormulario from '../../../../../components/form/formulario'
 
   export default {
     name: 'vivienda',
-
+    components: {AFormulario},
     async asyncData ({params}) {
       return {
-        paredes: await lookupService.viviendaParedes(),
-        techos: await lookupService.viviendaTechos(),
-        pisos: await lookupService.viviendaPisos(),
-        tipos: await lookupService.viviendaTipos(),
-        calidades: await lookupService.viviendaCalidad(),
-        mobiliarios: await lookupService.viviendaMobiliarios(),
-        modelo: await evaluacionService.evaluacionVivienda(params.evaluacion)
+        modelo: await evaluacionService.evaluacionVivienda(params.evaluacion),
+        schema: [
+          {
+            id: 1,
+            etiqueta: 'Tipo de Vivienda',
+            nombre: 'tipo',
+            tipo: 'lookup',
+            opciones: {
+              items: await lookupService.viviendaTipos()
+            }
+          },
+          {
+            id: 2,
+            etiqueta: 'Calidad de la Vivienda',
+            nombre: 'calidad',
+            tipo: 'lookup',
+            opciones: {
+              items: await lookupService.viviendaCalidad()
+            }
+          },
+          {
+            id: 3,
+            etiqueta: 'Calidad Otro',
+            nombre: 'calidadOtro',
+            tipo: 'texto',
+            disabled: (modelo) => {
+              console.log(modelo.calidad && modelo.calidad.id !== 16)
+
+              return modelo.calidad && modelo.calidad.id !== 16
+            },
+            opciones: {
+              max: 50
+            }
+          },
+          {
+            id: 4,
+            etiqueta: 'Estrato',
+            nombre: 'estrato',
+            tipo: 'slider',
+            opciones: {
+              min: 1,
+              max: 6
+            }
+          },
+          {
+            id: 5,
+            etiqueta: 'Dormitorios',
+            nombre: 'dormitorios',
+            tipo: 'slider',
+            opciones: {
+              min: 0,
+              max: 10
+            }
+          },
+          {
+            id: 6,
+            etiqueta: 'Material de las Paredes',
+            nombre: 'pared',
+            tipo: 'lookup',
+            opciones: {
+              items: await lookupService.viviendaParedes()
+            }
+          },
+          {
+            id: 7,
+            etiqueta: 'Material del Techo',
+            nombre: 'techo',
+            tipo: 'lookup',
+            opciones: {
+              items: await lookupService.viviendaTechos()
+            }
+          },
+          {
+            id: 8,
+            etiqueta: 'Material del Piso',
+            nombre: 'piso',
+            tipo: 'lookup',
+            opciones: {
+              items: await lookupService.viviendaPisos()
+            }
+          },
+          {
+            id: 9,
+            etiqueta: 'Mobiliario',
+            nombre: 'mobiliario',
+            tipo: 'lookup',
+            opciones: {
+              items: await lookupService.viviendaMobiliarios(),
+              chips: true,
+              multiple: true
+            }
+          }
+        ]
       }
     },
 
@@ -75,7 +122,3 @@
     }
   }
 </script>
-
-<style scoped>
-
-</style>

@@ -54,7 +54,9 @@ module.exports = {
       'bluebird',
       'moment',
       'traverson',
-      '~/plugins/vuetify.js'
+      '~/plugins/vuetify.js',
+      '~/services/lookup.js',
+      '~/services/evaluacion.js'
     ],
     extractCSS: true,
     /*

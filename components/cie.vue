@@ -19,7 +19,7 @@
 
 <script>
   import cieService from '~/services/cie'
-  import Rx from 'rxjs'
+  import { Subject } from 'rxjs'
 
   export default {
     name: 'aCie',
@@ -37,7 +37,7 @@
 
         items: [],
 
-        query$: new Rx.Subject()
+        query$: new Subject()
       }
     },
 
