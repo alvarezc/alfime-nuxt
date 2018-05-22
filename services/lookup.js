@@ -188,6 +188,12 @@ export default {
     return extractEmbedded('responsabilidades', data)
   },
 
+  async seccionTipos () {
+    const {data} = await axios.get(`${prefix}/seccionTipo`)
+
+    return extractEmbedded('seccionTipos', data)
+  },
+
   async viviendaCalidad () {
     return viviendaMaterial(4)
   },

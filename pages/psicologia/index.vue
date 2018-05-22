@@ -2,39 +2,52 @@
     <v-container>
         <div class="title">Psicologia</div>
         <template v-if="usuario">
-            <v-data-table :items="lista" item-key="id" :headers="headers" v-if="editItem.id === -1">
-                <template slot="items" slot-scope="props">
-                    <tr @click="editar(props.item.id)">
-                        <td>{{props.item.id}}</td>
-                        <td class="categoria__name">{{props.item.tipo.nombre}}</td>
-                        <td class="categoria__name">{{props.item.createdBy}}</td>
-                        <td class="categoria__name">{{props.item.createdDate}}</td>
-                        <td class="categoria__name">{{props.item.modifiedDate}}</td>
-                    </tr>
-                </template>
-            </v-data-table>
+            <template v-if="editItem.id === null">
+                <v-data-table :items="lista" item-key="id" :headers="headers">
+                    <template slot="items" slot-scope="props">
+                        <tr @click="editar(props.item.id)">
+                            <td>{{props.item.id}}</td>
+                            <td>{{props.item.tipo.nombre}}</td>
+                            <td>{{props.item.createdBy}}</td>
+                            <td>{{props.item.createdDate}}</td>
+                            <td>{{props.item.modifiedDate}}</td>
+                        </tr>
+                    </template>
+                </v-data-table>
+                <v-layout row>
+                    <lookup :items="seccionTipos" label="Agregar Tipo" v-model="seccionTipo"></lookup>
+                    <v-btn :disabled="!seccionTipo" @click="agregar()">Agregar</v-btn>
+                </v-layout>
+            </template>
             <template v-else>
-                <a-formulario v-model="editItem.contenido" :schema="schema" to="/psicologia"></a-formulario>
+                <a-formulario v-model="editItem.contenido" :schema="schema" to="/psicologia"
+                              @guarda="guarda()"></a-formulario>
             </template>
         </template>
         <template v-else>
             <h2>No hay usuario seleccionado</h2>
+            <v-btn to="/usuario">Seleccionar Usuario</v-btn>
         </template>
     </v-container>
 </template>
 
 <script>
+  import lookupService from '~/services/lookup'
   import seccionService from '~/services/seccion'
   import { mapState } from 'vuex'
-  import AFormulario from '../../components/form/formulario'
 
   export default {
     name: 'index',
-    components: {AFormulario},
+
+    async asyncData () {
+      return {
+        seccionTipos: await lookupService.seccionTipos()
+      }
+    },
 
     data () {
       return {
-        editItem: {id: -1, contenido: {generales: 'Probando'}},
+        editItem: {id: null, contenido: {generales: 'Probando'}},
 
         headers: [
           {text: 'ID', value: 'id'},
@@ -43,6 +56,8 @@
           {text: 'Creado En', value: 'createdDate'},
           {text: 'Modificado En', value: 'modifiedDate'}
         ],
+
+        seccionTipo: null,
 
         schema: [
           {
@@ -75,7 +90,9 @@
               multi: true
             }
           }
-        ]
+        ],
+
+        lista: []
       }
     },
 
@@ -83,17 +100,18 @@
       ...mapState('alfime', ['usuario'])
     },
 
-    asyncComputed: {
-      lista: {
-        async get () {
-          if (this.usuario) {
-            return seccionService.listaData(this.usuario.id, 1)
-          } else {
-            return []
-          }
-        },
-        default: []
+    mounted () {
+      const state = this.$store.state
+
+      if (state.alfime.usuario) {
+        this.getLista(state.alfime.usuario)
       }
+
+      this.$store.watch(
+        (state) => state.alfime.usuario,
+        (newValue) => {
+          this.getLista(newValue)
+        })
     },
 
     methods: {
@@ -101,11 +119,43 @@
         const seccionData = await seccionService.seccionData(seccionDataId)
 
         this.editItem = seccionData
+      },
+
+      async getLista (usuario) {
+        if (usuario) {
+          this.lista = await seccionService.listaData(this.usuario.id, 1)
+        } else {
+          this.lista = []
+        }
+      },
+
+      agregar () {
+        this.editItem = {
+          id: -1,
+
+          contenido: {
+            generales: null,
+            especificos: null,
+            plan: null
+          },
+
+          tipo: this.seccionTipo,
+
+          seccion: 1
+        }
+      },
+
+      async guarda () {
+        if (this.editItem.id === -1) {
+          await seccionService.agregaSeccionData(this.usuario.id, this.editItem)
+        } else {
+          await seccionService.guardaSeccionData(this.editItem)
+        }
+
+        this.editItem = {id: null, contenido: {}}
+
+        this.getLista(this.usuario)
       }
     }
   }
 </script>
-
-<style scoped>
-
-</style>

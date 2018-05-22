@@ -35,7 +35,7 @@ class SeccionService {
       .jsonHal()
       .convertResponseToObject()
       .patch({
-        contenido
+        contenido: JSON.stringify(contenido)
       })
       .resultWithTraversal()
 
@@ -44,16 +44,19 @@ class SeccionService {
       .result
   }
 
-  async agregaSeccionData (usuarioId, {id, ...data}) {
+  async agregaSeccionData (usuarioId, {id, tipo, contenido, seccion}) {
     const {traversal} = await traverson
-      .from(`${prefix}/evaluacionVivienda`)
+      .from(`${prefix}/seccionData`)
       .jsonHal()
       .convertResponseToObject()
       .post(
-        cleanSelf({
-          usuario: `${prefix}/usuario/${usuarioId}`,
-          ...cleanSelf(data)
-        })
+        cleanSelf(
+          {
+            usuario: `${prefix}/usuario/${usuarioId}`,
+            contenido: JSON.stringify(cleanSelf(contenido)),
+            seccion: `${prefix}/seccion/${seccion}`,
+            tipo: tipo
+          })
       )
       .resultWithTraversal()
 
