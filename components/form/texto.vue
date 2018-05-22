@@ -21,7 +21,7 @@
         }
 
         if (this.options.max) {
-          result.push((v) => (v && v.length <= this.options.max) ||
+          result.push((v) => !v || v.length <= this.options.max ||
             `Campo solo puede tener ${this.options.max} caracteres`)
         }
 

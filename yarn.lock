@@ -6250,6 +6250,10 @@ vm-browserify@0.0.4:
   dependencies:
     indexof "0.0.1"
 
+vue-async-computed@^3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/vue-async-computed/-/vue-async-computed-3.3.1.tgz#9d754e649ccabef97e7e3932f1bc097a66a23db7"
+
 vue-form-generator@^2.2.2:
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/vue-form-generator/-/vue-form-generator-2.2.2.tgz#7b419ff830e0b5a21d9033d65b4583d264336e8e"
