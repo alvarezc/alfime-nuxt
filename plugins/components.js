@@ -13,6 +13,8 @@ import formulario from '~/components/form/formulario'
 import formTexto from '~/components/form/texto'
 import formLookup from '~/components/form/lookup'
 import formSlider from '~/components/form/slider'
+import formCheck from '~/components/form/check'
+import formEtiqueta from '~/components/form/etiqueta'
 
 Vue.component(aEvaluacion.name, aEvaluacion)
 Vue.component(lookup.name, lookup)
@@ -27,3 +29,5 @@ Vue.component(formulario.name, formulario)
 Vue.component(formTexto.name, formTexto)
 Vue.component(formLookup.name, formLookup)
 Vue.component(formSlider.name, formSlider)
+Vue.component(formEtiqueta.name, formEtiqueta)
+Vue.component(formCheck.name, formCheck)
