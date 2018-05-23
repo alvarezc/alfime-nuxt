@@ -15,6 +15,7 @@ import formLookup from '~/components/form/lookup'
 import formSlider from '~/components/form/slider'
 import formCheck from '~/components/form/check'
 import formEtiqueta from '~/components/form/etiqueta'
+import formCalendario from '~/components/form/calendario'
 
 Vue.component(aEvaluacion.name, aEvaluacion)
 Vue.component(lookup.name, lookup)
@@ -31,3 +32,4 @@ Vue.component(formLookup.name, formLookup)
 Vue.component(formSlider.name, formSlider)
 Vue.component(formEtiqueta.name, formEtiqueta)
 Vue.component(formCheck.name, formCheck)
+Vue.component(formCalendario.name, formCalendario)
