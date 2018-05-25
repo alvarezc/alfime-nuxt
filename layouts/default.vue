@@ -6,9 +6,16 @@
                 v-model="drawer"
                 fixed
                 app>
+            <v-layout column v-if="usuario" style="text-align: center">
+                <div>
+                    <b>{{usuario.nombre}}</b>
+                    <br>
+                    {{usuario.documento}}
+                </div>
+            </v-layout>
             <v-list>
                 <template v-for="item in getItemList()">
-                    <v-divider v-if="item.icon && item.id !== 1"></v-divider>
+                    <v-divider></v-divider>
                     <component :is="item.subItems ? 'nav-sub-item' : 'nav-item'" :item="item"></component>
                 </template>
                 <v-divider></v-divider>
@@ -81,7 +88,8 @@
         title: 'ALFIME',
         cedula: '',
         usuarioId: null,
-        evaluacionId: null
+        evaluacionId: null,
+        usuario: null
       }
     },
 
@@ -157,14 +165,16 @@
     mounted () {
       const state = this.$store.state
 
-      this.usuarioId = state.alfime.usuario && state.alfime.usuario.id
+      this.usuario = state.alfime.usuario
+      this.usuarioId = this.usuario && this.usuario.id
       this.evaluacionId = state.alfime.evaluacion && state.alfime.evaluacion.id
 
       this.$store.watch(state => ({
-        usuarioId: state.alfime.usuario && state.alfime.usuario.id,
+        usuario: state.alfime.usuario,
         evaluacionId: state.alfime.evaluacion && state.alfime.evaluacion.id
       }), (value) => {
-        this.usuarioId = value.usuarioId
+        this.usuario = value.usuario
+        this.usuarioId = this.usuario && this.usuario.id
         this.evaluacionId = value.evaluacionId
         console.log(`Usuario is now ${JSON.stringify(value)}`)
       })
