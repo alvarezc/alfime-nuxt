@@ -1,6 +1,6 @@
 <template>
     <v-checkbox :label="label" :required="required" :disabled="disabled"
-                  :value="internalValue" @input="update"></v-checkbox>
+                v-model="checkValue"></v-checkbox>
 </template>
 
 <script>
@@ -9,6 +9,19 @@
   export default {
     name: 'AFormCheck',
 
-    mixins: [base]
+    mixins: [base],
+
+    computed: {
+      checkValue: {
+        get () {
+          return this.internalValue
+        },
+
+        set (newValue) {
+          this.internalValue = newValue
+          this.update(newValue)
+        }
+      }
+    }
   }
 </script>

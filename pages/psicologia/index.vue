@@ -20,8 +20,8 @@
                 </v-layout>
             </template>
             <template v-else>
-                <a-formulario v-model="editItem.contenido" :schema="schemaPlan" to="/psicologia"
-                              @guarda="guarda()"></a-formulario>
+                <a-formulario v-model="editItem.contenido" :schema="currentSchema"
+                              @guarda="guarda()" @cerrar="cerrar()"></a-formulario>
             </template>
         </template>
         <template v-else>
@@ -35,6 +35,7 @@
   import lookupService from '~/services/lookup'
   import seccionService from '~/services/seccion'
   import { mapState } from 'vuex'
+  import { plan, informe, seguimiento } from './schemas'
 
   export default {
     name: 'index',
@@ -59,141 +60,7 @@
 
         seccionTipo: null,
 
-        schemaPlan: [
-          {
-            id: 1,
-            etiqueta: 'Objetivos Generales',
-            nombre: 'generales',
-            tipo: 'texto',
-            opciones: {
-              max: 500,
-              multi: true
-            }
-          },
-          {
-            id: 2,
-            etiqueta: 'Objetivos Especificos',
-            nombre: 'especificos',
-            tipo: 'texto',
-            opciones: {
-              max: 500,
-              multi: true
-            }
-          },
-          {
-            id: 3,
-            etiqueta: 'Plan de Atención',
-            nombre: 'plan',
-            tipo: 'texto',
-            opciones: {
-              max: 500,
-              multi: true
-            }
-          },
-          {
-            id: 4,
-            etiqueta: 'Metodología',
-            nombre: 'salidaP',
-            tipo: 'etiqueta'
-          },
-          {
-            id: 5,
-            etiqueta: 'Salida pedagógica',
-            nombre: 'salidaP',
-            tipo: 'check'
-          },
-          {
-            id: 6,
-            etiqueta: 'Orientación',
-            nombre: 'orientacion',
-            tipo: 'check'
-          },
-          {
-            id: 7,
-            etiqueta: 'Consulta',
-            nombre: 'consulta',
-            tipo: 'check'
-          },
-          {
-            id: 8,
-            etiqueta: ' Taller',
-            nombre: 'taller',
-            tipo: 'check'
-          }
-        ],
-        schemaInforme: [
-          {
-            id: 9,
-            etiqueta: 'Motivo de consulta',
-            nombre: 'motivo',
-            tipo: 'texto',
-            opciones: {
-              max: 500,
-              multi: true
-            }
-          },
-          {
-            id: 10,
-            etiqueta: 'Logros',
-            nombre: 'logros',
-            tipo: 'texto',
-            opciones: {
-              max: 500,
-              multi: true
-            }
-          },
-          {
-            id: 11,
-            etiqueta: 'Dificultades',
-            nombre: 'dificultades',
-            tipo: 'texto',
-            opciones: {
-              max: 500,
-              multi: true
-            }
-          },
-          {
-            id: 12,
-            etiqueta: 'Observaciones',
-            nombre: 'observaciones',
-            tipo: 'texto'
-          },
-          {
-            id: 13,
-            etiqueta: 'Actividad',
-            nombre: 'actividad',
-            tipo: 'etiqueta'
-          },
-          {
-            id: 14,
-            etiqueta: 'Cine Foro',
-            nombre: 'cine',
-            tipo: 'check'
-          },
-          {
-            id: 15,
-            etiqueta: 'Recreación',
-            nombre: 'recreacion',
-            tipo: 'check'
-          },
-          {
-            id: 16,
-            etiqueta: 'Exposición ',
-            nombre: 'exposicion',
-            tipo: 'check'
-          },
-          {
-            id: 17,
-            etiqueta: ' Trabajo en equipo',
-            nombre: 'trabajoE',
-            tipo: 'check'
-          },
-          {
-            id: 18,
-            etiqueta: 'Otro',
-            nombre: 'otro',
-            tipo: 'texto'
-          }],
+        currentSchema: [],
 
         lista: []
       }
@@ -221,6 +88,17 @@
         const seccionData = await seccionService.seccionData(seccionDataId)
 
         this.editItem = seccionData
+
+        switch (seccionData.tipo.id) {
+          case 1:
+            this.currentSchema = plan.schema
+            break
+          case 2:
+            this.currentSchema = informe.schema
+            break
+          default:
+            this.currentSchema = seguimiento.schema
+        }
       },
 
       async getLista (usuario) {
@@ -235,27 +113,25 @@
         this.editItem = {
           id: -1,
 
-          contenido: {
-            salidasP: null,
-            orientacion: null,
-            consulta: null,
-            taller: null,
-            generales: null,
-            especificos: null,
-            plan: null,
-            motivo: null,
-            logros: null,
-            dificultades: null,
-            observaciones: null,
-            cine: null,
-            recreacion: null,
-            exposicion: null,
-            trabajoE: null,
-            otro: null
-          },
+          contenido: {},
+
           tipo: this.seccionTipo,
 
           seccion: 1
+        }
+
+        switch (this.seccionTipo.id) {
+          case 1:
+            this.editItem.contenido = {...plan.model}
+            this.currentSchema = plan.schema
+            break
+          case 2:
+            this.editItem.contenido = {...informe.model}
+            this.currentSchema = informe.schema
+            break
+          default:
+            this.editItem.contenido = {...seguimiento.model}
+            this.currentSchema = seguimiento.schema
         }
       },
 
@@ -269,6 +145,10 @@
         this.editItem = {id: null, contenido: {}}
 
         this.getLista(this.usuario)
+      },
+
+      cerrar () {
+        this.editItem = {id: null, contenido: {}}
       }
     }
   }

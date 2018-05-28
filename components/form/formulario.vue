@@ -8,7 +8,7 @@
                            @input="setValue" :name="`${item.tipo}${item.id}`"></component>
             </v-card-text>
 
-            <a-actions :to="to" @guarda="() => $emit('guarda', this.value)"></a-actions>
+            <a-actions :to="to" @guarda="() => $emit('guarda', this.value)" @cerrar="() => $emit('cerrar')"></a-actions>
         </form>
     </v-card>
 </template>
@@ -49,7 +49,6 @@
       },
 
       isDisabled (source) {
-        console.log(`Checking disabled ${source}`)
         if (isFunction(source)) {
           return source(this.value)
         } else {

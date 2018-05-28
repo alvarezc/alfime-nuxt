@@ -23,6 +23,7 @@ class SeccionService {
     const result = await traverson
       .from(`${prefix}/seccionData/${seccionDataId}`)
       .jsonHal()
+      .withRequestOptions({qs: {projection: 'tipo'}})
       .getResource()
       .result
 
