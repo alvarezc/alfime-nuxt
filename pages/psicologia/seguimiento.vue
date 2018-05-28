@@ -20,7 +20,7 @@
                 </v-layout>
             </template>
             <template v-else>
-                <a-formulario v-model="editItem.contenido" :schema="schemaPlan" to="/psicologia"
+                <a-formulario v-model="editItem.contenido" :schema="schemaSeguimiento" to="/psicologia"
                               @guarda="guarda()"></a-formulario>
             </template>
         </template>
@@ -31,7 +31,12 @@
     </v-container>
 </template>
 
+
 <script>
+  export default {
+    name: 'seguimiento'
+  }
+
   import lookupService from '~/services/lookup'
   import seccionService from '~/services/seccion'
   import { mapState } from 'vuex'
@@ -59,69 +64,7 @@
 
         seccionTipo: null,
 
-        schemaPlan: [
-          {
-            id: 1,
-            etiqueta: 'Objetivos Generales',
-            nombre: 'generales',
-            tipo: 'texto',
-            opciones: {
-              max: 500,
-              multi: true
-            }
-          },
-          {
-            id: 2,
-            etiqueta: 'Objetivos Especificos',
-            nombre: 'especificos',
-            tipo: 'texto',
-            opciones: {
-              max: 500,
-              multi: true
-            }
-          },
-          {
-            id: 3,
-            etiqueta: 'Plan de Atención',
-            nombre: 'plan',
-            tipo: 'texto',
-            opciones: {
-              max: 500,
-              multi: true
-            }
-          },
-          {
-            id: 4,
-            etiqueta: 'Metodología',
-            nombre: 'salidaP',
-            tipo: 'etiqueta'
-          },
-          {
-            id: 5,
-            etiqueta: 'Salida pedagógica',
-            nombre: 'salidaP',
-            tipo: 'check'
-          },
-          {
-            id: 6,
-            etiqueta: 'Orientación',
-            nombre: 'orientacion',
-            tipo: 'check'
-          },
-          {
-            id: 7,
-            etiqueta: 'Consulta',
-            nombre: 'consulta',
-            tipo: 'check'
-          },
-          {
-            id: 8,
-            etiqueta: ' Taller',
-            nombre: 'taller',
-            tipo: 'check'
-          }
-        ],
-        schemaInforme: [
+        schemaSeguimiento: [
           {
             id: 9,
             etiqueta: 'Motivo de consulta',
@@ -158,42 +101,7 @@
             nombre: 'observaciones',
             tipo: 'texto'
           },
-          {
-            id: 13,
-            etiqueta: 'Actividad',
-            nombre: 'actividad',
-            tipo: 'etiqueta'
-          },
-          {
-            id: 14,
-            etiqueta: 'Cine Foro',
-            nombre: 'cine',
-            tipo: 'check'
-          },
-          {
-            id: 15,
-            etiqueta: 'Recreación',
-            nombre: 'recreacion',
-            tipo: 'check'
-          },
-          {
-            id: 16,
-            etiqueta: 'Exposición ',
-            nombre: 'exposicion',
-            tipo: 'check'
-          },
-          {
-            id: 17,
-            etiqueta: ' Trabajo en equipo',
-            nombre: 'trabajoE',
-            tipo: 'check'
-          },
-          {
-            id: 18,
-            etiqueta: 'Otro',
-            nombre: 'otro',
-            tipo: 'texto'
-          }],
+        ],
 
         lista: []
       }
@@ -236,22 +144,10 @@
           id: -1,
 
           contenido: {
-            salidasP: null,
-            orientacion: null,
-            consulta: null,
-            taller: null,
-            generales: null,
-            especificos: null,
-            plan: null,
             motivo: null,
             logros: null,
             dificultades: null,
-            observaciones: null,
-            cine: null,
-            recreacion: null,
-            exposicion: null,
-            trabajoE: null,
-            otro: null
+            observaciones: null
           },
           tipo: this.seccionTipo,
 
@@ -273,3 +169,8 @@
     }
   }
 </script>
+<
+style
+scoped >
+
+< /style>

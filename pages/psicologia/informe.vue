@@ -20,7 +20,7 @@
                 </v-layout>
             </template>
             <template v-else>
-                <a-formulario v-model="editItem.contenido" :schema="schemaPlan" to="/psicologia"
+                <a-formulario v-model="editItem.contenido" :schema="schemaInforme" to="/psicologia"
                               @guarda="guarda()"></a-formulario>
             </template>
         </template>
@@ -59,68 +59,6 @@
 
         seccionTipo: null,
 
-        schemaPlan: [
-          {
-            id: 1,
-            etiqueta: 'Objetivos Generales',
-            nombre: 'generales',
-            tipo: 'texto',
-            opciones: {
-              max: 500,
-              multi: true
-            }
-          },
-          {
-            id: 2,
-            etiqueta: 'Objetivos Especificos',
-            nombre: 'especificos',
-            tipo: 'texto',
-            opciones: {
-              max: 500,
-              multi: true
-            }
-          },
-          {
-            id: 3,
-            etiqueta: 'Plan de Atención',
-            nombre: 'plan',
-            tipo: 'texto',
-            opciones: {
-              max: 500,
-              multi: true
-            }
-          },
-          {
-            id: 4,
-            etiqueta: 'Metodología',
-            nombre: 'salidaP',
-            tipo: 'etiqueta'
-          },
-          {
-            id: 5,
-            etiqueta: 'Salida pedagógica',
-            nombre: 'salidaP',
-            tipo: 'check'
-          },
-          {
-            id: 6,
-            etiqueta: 'Orientación',
-            nombre: 'orientacion',
-            tipo: 'check'
-          },
-          {
-            id: 7,
-            etiqueta: 'Consulta',
-            nombre: 'consulta',
-            tipo: 'check'
-          },
-          {
-            id: 8,
-            etiqueta: ' Taller',
-            nombre: 'taller',
-            tipo: 'check'
-          }
-        ],
         schemaInforme: [
           {
             id: 9,
@@ -193,7 +131,8 @@
             etiqueta: 'Otro',
             nombre: 'otro',
             tipo: 'texto'
-          }],
+          }
+        ],
 
         lista: []
       }
