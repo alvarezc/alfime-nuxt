@@ -1,15 +1,17 @@
 <template>
-    <v-container>
-        Aula Pedagogica
-    </v-container>
+    <a-seccion titulo="Aula" :templates="templates" :seccion="1"/>
 </template>
 
 <script>
+  import { plan, informe, seguimiento } from './schemas'
+
   export default {
-    name: 'index'
+    name: 'index',
+
+    data () {
+      return {
+        templates: {plan, informe, seguimiento}
+      }
+    }
   }
 </script>
-
-<style scoped>
-
-</style>

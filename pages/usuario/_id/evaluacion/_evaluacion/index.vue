@@ -57,10 +57,6 @@
 
         <v-card-actions>
             <v-btn flat color="blue" :to="`${parentLink}/editar`">Editar</v-btn>
-            <v-btn flat color="orange" :to="`${parentLink}/familia`">Familia</v-btn>
-            <v-btn flat color="orange" :to="`${parentLink}/ocupacion`">Ocupacion</v-btn>
-            <v-btn flat color="orange" :to="`${parentLink}/ingresos`">Ingresos</v-btn>
-
         </v-card-actions>
     </v-card>
 </template>

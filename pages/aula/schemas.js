@@ -21,69 +21,128 @@ export const plan = {
       }
     },
     {
-      id: 3,
-      etiqueta: 'Plan de Atención',
-      nombre: 'plan',
-      tipo: 'texto',
-      opciones: {
-        max: 500,
-        multi: true
-      }
-    },
-    {
       id: 4,
       etiqueta: 'Metodología',
       tipo: 'etiqueta'
     },
     {
       id: 5,
-      etiqueta: 'Salida pedagógica',
-      nombre: 'salidaP',
+      etiqueta: 'Escuela de Padres',
+      nombre: 'padres',
       tipo: 'check'
     },
     {
       id: 6,
-      etiqueta: 'Orientación',
-      nombre: 'orientacion',
+      etiqueta: 'Visita Domiciliaria',
+      nombre: 'visita',
       tipo: 'check'
     },
     {
       id: 7,
-      etiqueta: 'Consulta',
-      nombre: 'consulta',
-      tipo: 'check'
+      etiqueta: 'Método',
+      tipo: 'etiqueta'
     },
     {
       id: 8,
-      etiqueta: ' Taller',
-      nombre: 'taller',
+      etiqueta: 'Conversatorio',
+      nombre: 'conversatorio',
+      tipo: 'check'
+    },
+    {
+      id: 9,
+      etiqueta: 'Lecturas',
+      nombre: 'lecturas',
+      tipo: 'check'
+    },
+    {
+      id: 10,
+      etiqueta: 'Música',
+      nombre: 'musica',
+      tipo: 'check'
+    },
+    {
+      id: 11,
+      etiqueta: 'Películas',
+      nombre: 'peliculas',
+      tipo: 'check'
+    },
+    {
+      id: 12,
+      etiqueta: 'Manualidades',
+      nombre: 'manualidades',
+      tipo: 'check'
+    },
+    {
+      id: 13,
+      etiqueta: 'Salida Pedagógica',
+      nombre: 'salida',
+      tipo: 'check'
+    },
+    {
+      id: 14,
+      etiqueta: 'Uso de Medios',
+      nombre: 'medios',
+      tipo: 'check'
+    },
+    {
+      id: 15,
+      etiqueta: 'Creación de Inventos',
+      nombre: 'inventos',
+      tipo: 'check'
+    },
+    {
+      id: 16,
+      etiqueta: 'Contexto',
+      tipo: 'etiqueta'
+    },
+    {
+      id: 17,
+      etiqueta: 'Hogar',
+      nombre: 'hogar',
+      tipo: 'check'
+    },
+    {
+      id: 18,
+      etiqueta: 'Aire Libre',
+      nombre: 'aireLibre',
+      tipo: 'check'
+    },
+    {
+      id: 19,
+      etiqueta: 'Aula',
+      nombre: 'aula',
+      tipo: 'check'
+    },
+    {
+      id: 20,
+      etiqueta: 'Comedor',
+      nombre: 'comedor',
       tipo: 'check'
     }
   ],
   model: {
     generales: null,
     especificos: null,
-    plan: null,
-    salidaP: false,
-    orientacion: false,
-    consulta: false,
-    taller: false
+    padres: false,
+    visita: false,
+    conversatorio: false,
+    lecturas: false,
+    musica: false,
+    peliculas: false,
+    manualidades: false,
+    salida: false,
+    medios: false,
+    inventos: false,
+    hogar: false,
+    aireLibre: false,
+    aula: false,
+    comedor: false
   }
 }
 
 export const informe = {
   schema: [
     {
-      id: 9,
-      etiqueta: 'Motivo de consulta',
-      nombre: 'motivo',
-      tipo: 'texto',
-      opciones: {
-        max: 500,
-        multi: true
-      }
-    },
-    {
       id: 10,
       etiqueta: 'Logros',
       nombre: 'logros',
@@ -112,74 +171,18 @@ export const informe = {
         max: 500,
         multi: true
       }
-    },
-    {
-      id: 13,
-      etiqueta: 'Actividad',
-      nombre: 'actividad',
-      tipo: 'etiqueta'
-    },
-    {
-      id: 14,
-      etiqueta: 'Cine Foro',
-      nombre: 'cine',
-      tipo: 'check'
-    },
-    {
-      id: 15,
-      etiqueta: 'Recreación',
-      nombre: 'recreacion',
-      tipo: 'check'
-    },
-    {
-      id: 16,
-      etiqueta: 'Exposición ',
-      nombre: 'exposicion',
-      tipo: 'check'
-    },
-    {
-      id: 17,
-      etiqueta: ' Trabajo en equipo',
-      nombre: 'trabajo',
-      tipo: 'check'
-    },
-    {
-      id: 18,
-      etiqueta: 'Otro',
-      nombre: 'otro',
-      tipo: 'texto',
-      opciones: {
-        max: 500,
-        multi: true
-      }
     }
   ],
   model: {
-    motivo: null,
     logros: null,
     dificultades: null,
-    observaciones: null,
-    cine: false,
-    recreacion: false,
-    exposicion: false,
-    trabajo: false,
-    otro: null
+    observaciones: null
   }
 }
 
 export const seguimiento = {
   schema: [
     {
-      id: 9,
-      etiqueta: 'Motivo de consulta',
-      nombre: 'motivo',
-      tipo: 'texto',
-      opciones: {
-        max: 500,
-        multi: true
-      }
-    },
-    {
       id: 10,
       etiqueta: 'Logros',
       nombre: 'logros',
@@ -211,7 +214,6 @@ export const seguimiento = {
     }
   ],
   model: {
-    motivo: null,
     logros: null,
     dificultades: null,
     observaciones: null

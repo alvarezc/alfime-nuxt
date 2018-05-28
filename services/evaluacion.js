@@ -332,6 +332,62 @@ class EvaluacionService {
     return atencion
   }
 
+  async evaluacionPsicologico (evaluacionId) {
+    try {
+      const result = await traverson
+        .from(`${prefix}/evaluacionPsicologico/${evaluacionId}`)
+        .jsonHal()
+        .getResource()
+        .result
+
+      return result
+    } catch (e) {
+      return {
+        id: -1,
+        comportamiento: null,
+        estadoEmocional: null,
+        diagnosticoSocial: null
+      }
+    }
+  }
+
+  async guardaPsicologico ({id, comportamiento, estadoEmocional, diagnosticoSocial}) {
+    const {traversal} = await traverson
+      .from(`${prefix}/evaluacionPsicologico/${id}`)
+      .jsonHal()
+      .convertResponseToObject()
+      .patch({
+        comportamiento,
+        estadoEmocional,
+        diagnosticoSocial
+      })
+      .resultWithTraversal()
+
+    return traversal.continue().follow('evaluacionPsicologico')
+      .getResource()
+      .result
+  }
+
+  async agregaPsicologico (evaluacionId, {id, ...medico}) {
+    const {traversal} = await traverson
+      .from(`${prefix}/evaluacionPsicologico`)
+      .jsonHal()
+      .convertResponseToObject()
+      .post(
+        cleanSelf({
+          evaluacion: `${prefix}/evaluacion/${evaluacionId}`,
+          ...medico
+        })
+      )
+      .resultWithTraversal()
+
+    return traversal
+      .continue()
+      .follow('evaluacionPsicologico')
+      .getResource()
+      .result
+  }
+
   async evaluacionMedico (evaluacionId) {
     try {
       const result = await traverson

@@ -8,6 +8,7 @@ import ingresos from '~/components/ingresos'
 import actions from '~/components/actions'
 import item from '~/components/nav-item'
 import subItem from '~/components/nav-sub-item'
+import seccion from '~/components/seccion'
 
 import formulario from '~/components/form/formulario'
 import formTexto from '~/components/form/texto'
@@ -25,6 +26,7 @@ Vue.component(ingresos.name, ingresos)
 Vue.component(actions.name, actions)
 Vue.component(item.name, item)
 Vue.component(subItem.name, subItem)
+Vue.component(seccion.name, seccion)
 
 Vue.component(formulario.name, formulario)
 Vue.component(formTexto.name, formTexto)
