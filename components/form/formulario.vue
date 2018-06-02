@@ -1,14 +1,18 @@
 <template>
     <v-card>
-        <form id="elFormulario">
+        <form id="elFormulario" @submit.prevent="validateBeforeSubmit">
             <v-card-text>
-                <component :is="getFieldType(item)" :disabled="isDisabled(item.disabled)" :required="item.requerido"
-                           v-for="item in schema" :label="item.etiqueta" :key="getKey(item)"
-                           :schema="item" :value="getValue(item)" :options="item.opciones || {}"
-                           @input="setValue" :name="`${item.tipo}${item.id}`"></component>
+                <template v-for="item in schema">
+                    <component :is="getFieldType(item)" :disabled="isDisabled(item.disabled)"
+                               :label="item.etiqueta" :key="getKey(item)" :validar="item.validar"
+                               :schema="item" :value="getValue(item)" :options="item.opciones || {}"
+                               @input="setValue" :name="item.nombre"></component>
+                    <span v-show="errors.has(item.nombre)"
+                          class="help is-danger">{{ errors.first(item.nombre) }}</span>
+                </template>
             </v-card-text>
 
-            <a-actions :to="to" @guarda="() => $emit('guarda', this.value)" @cerrar="() => $emit('cerrar')"></a-actions>
+            <a-actions :to="to" @guarda="validateBeforeSubmit" @cerrar="() => $emit('cerrar')"></a-actions>
         </form>
     </v-card>
 </template>
@@ -18,6 +22,8 @@
 
   export default {
     name: 'AFormulario',
+
+    inject: ['$validator'],
 
     props: ['schema', 'value', 'to'],
 
@@ -54,7 +60,31 @@
         } else {
           return source
         }
+      },
+
+      validateBeforeSubmit () {
+        this.$validator.validateAll()
+          .then((result) => {
+            if (result) {
+              // eslint-disable-next-line
+              alert('Form Submitted!')
+              this.$emit('guarda', this.value)
+              return
+            }
+
+            alert('Por favor corrige los errores primero')
+          })
       }
     }
   }
 </script>
+
+<style scoped>
+    .is-danger {
+        color: #f00
+    }
+
+    h3 {
+        padding-top: 18px;
+    }
+</style>

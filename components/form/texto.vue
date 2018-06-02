@@ -1,7 +1,8 @@
 <template>
     <v-text-field :label="label" :required="required" :disabled="disabled" :counter="options.max"
                   :rules="rules" :mask="options.mask" :multi-line="options.multi"
-                  :value="internalValue" @input="update"></v-text-field>
+                  v-model="internalValue" :name="name" v-validate="validar" v-validate.initial="validar"
+                  :data-vv-as="label"></v-text-field>
 </template>
 
 <script>

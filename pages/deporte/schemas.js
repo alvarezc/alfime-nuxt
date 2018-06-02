@@ -5,7 +5,6 @@ export const plan = {
       etiqueta: 'Objetivos Generales',
       nombre: 'generales',
       tipo: 'texto',
-      validar: 'required',
       opciones: {
         max: 500,
         multi: true
@@ -16,7 +15,6 @@ export const plan = {
       etiqueta: 'Objetivos Especificos',
       nombre: 'especificos',
       tipo: 'texto',
-      validar: 'required',
       opciones: {
         max: 500,
         multi: true
@@ -27,7 +25,6 @@ export const plan = {
       etiqueta: 'Plan de Atención',
       nombre: 'plan',
       tipo: 'texto',
-      validar: 'required',
       opciones: {
         max: 500,
         multi: true
@@ -110,11 +107,7 @@ export const informe = {
       id: 12,
       etiqueta: 'Observaciones',
       nombre: 'observaciones',
-      tipo: 'texto',
-      opciones: {
-        max: 500,
-        multi: true
-      }
+      tipo: 'texto'
     },
     {
       id: 13,
@@ -150,11 +143,7 @@ export const informe = {
       id: 18,
       etiqueta: 'Otro',
       nombre: 'otro',
-      tipo: 'texto',
-      opciones: {
-        max: 500,
-        multi: true
-      }
+      tipo: 'texto'
     }
   ],
   model: {
@@ -206,11 +195,7 @@ export const seguimiento = {
       id: 12,
       etiqueta: 'Observaciones',
       nombre: 'observaciones',
-      tipo: 'texto',
-      opciones: {
-        max: 500,
-        multi: true
-      }
+      tipo: 'texto'
     }
   ],
   model: {

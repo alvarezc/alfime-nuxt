@@ -6,27 +6,39 @@ export default {
     'required',
     'label',
     'value',
-    'disabled'
+    'disabled',
+    'name',
+    'validar'
   ],
+
+  inject: ['$validator'],
 
   data () {
     return {
-      internalValue: null,
       ready: false
     }
   },
 
   mounted () {
-    this.internalValue = this.value
     this.ready = true
+  },
+
+  computed: {
+    internalValue: {
+      get () {
+        return this.value
+      },
+
+      set (newValue) {
+        this.update(newValue)
+      }
+    }
   },
 
   methods: {
     update (event) {
       if (this.ready) {
         this.$emit('input', this.schema, event)
-
-        this.internalValue = event
       }
     }
   }

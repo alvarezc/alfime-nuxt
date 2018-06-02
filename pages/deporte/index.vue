@@ -1,15 +1,17 @@
 <template>
-    <v-container>
-        Deportes
-    </v-container>
+    <a-seccion titulo="Deportes" :templates="templates" :seccion="2"/>
 </template>
 
 <script>
+  import { plan, informe, seguimiento } from './schemas'
+
   export default {
-    name: 'index'
+    name: 'index',
+
+    data () {
+      return {
+        templates: {plan, informe, seguimiento}
+      }
+    }
   }
 </script>
-
-<style scoped>
-
-</style>

@@ -34,7 +34,6 @@
 <script>
   import lookupService from '~/services/lookup'
   import seccionService from '~/services/seccion'
-  import { mapState } from 'vuex'
 
   export default {
     name: 'ASeccion',
@@ -74,28 +73,34 @@
 
         currentSchema: [],
 
-        lista: []
+        lista: [],
+
+        usuario: null
       }
     },
 
-    computed: {
-      ...mapState('alfime', ['usuario'])
-    },
-
-    async mounted () {
+    mounted () {
       const state = this.$store.state
 
-      if (state.alfime.usuario) {
+      if (state.alfime && state.alfime.usuario) {
+        console.log(`Usuario ${JSON.stringify(state.alfime.usuario)}`)
+
+        this.usuario = state.alfime.usuario
         this.getLista(state.alfime.usuario)
       }
 
       this.$store.watch(
         (state) => state.alfime.usuario,
         (newValue) => {
+          console.log(`Usuario ${JSON.stringify(newValue)}`)
+          this.usuario = newValue
           this.getLista(newValue)
         })
 
-      this.seccionTipos = await lookupService.seccionTipos()
+      lookupService.seccionTipos()
+        .then(tipos => {
+          this.seccionTipos = tipos
+        })
     },
 
     methods: {
@@ -118,7 +123,7 @@
 
       async getLista (usuario) {
         if (usuario) {
-          this.lista = await seccionService.listaData(this.usuario.id, this.seccion)
+          this.lista = await seccionService.listaData(usuario.id, this.seccion)
         } else {
           this.lista = []
         }

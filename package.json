@@ -20,9 +20,8 @@
     "traverson-hal": "^6.0.0",
     "traverson-promise": "^0.0.9",
     "urijs": "^1.19.1",
+    "vee-validate": "^2.0.9",
     "vue": "^2.5.0",
-    "vue-async-computed": "^3.3.1",
-    "vue-form-generator": "^2.2.2",
     "vuetify": "^1.0.18",
     "vuex": "^3.0.0",
     "vuex-persistedstate": "^2.5.2"

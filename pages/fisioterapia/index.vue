@@ -1,15 +1,17 @@
 <template>
-    <v-container>
-        Fisioterapia
-    </v-container>
+    <a-seccion titulo="Fisioterapia" :templates="templates" :seccion="3"/>
 </template>
 
 <script>
+  import { plan, informe, seguimiento } from './schemas'
+
   export default {
-    name: 'index'
+    name: 'index',
+
+    data () {
+      return {
+        templates: {plan, informe, seguimiento}
+      }
+    }
   }
 </script>
-
-<style scoped>
-
-</style>

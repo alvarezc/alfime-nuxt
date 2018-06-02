@@ -34,8 +34,8 @@ module.exports = {
 
   plugins: [
     '~/plugins/vuetify.js',
+    '~/plugins/validate.js',
     '~/plugins/components.js',
-    '~/plugins/async.js',
     {src: '~/plugins/localStorage.js', ssr: false}
   ],
 

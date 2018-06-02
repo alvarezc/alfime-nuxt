@@ -19,7 +19,7 @@
 
 <script>
   import cieService from '~/services/cie'
-  import { Subject } from 'rxjs'
+  import { Subject } from 'rxjs/Subject'
 
   export default {
     name: 'aCie',
