@@ -145,7 +145,7 @@
                 {
                   id: 46,
                   title: 'Aspecto Psicológico',
-                  to: `/usuario/${this.usuarioId}/evaluacion/${this.evaluacionId}/aspecto-psicologico`
+                  to: `/usuario/${this.usuarioId}/evaluacion/${this.evaluacionId}/psicologico`
                 }
               ]
 
