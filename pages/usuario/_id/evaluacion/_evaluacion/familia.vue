@@ -8,6 +8,9 @@
             <v-tab-item key="1">
                 <v-card flat>
                     <v-card-text>
+                        <lookup label="Estado Civil" :items="estadosCiviles" v-model="modelo.estadoCivil"
+                                required></lookup>
+
                         <lookup :items="familiaTipos" required
                                 label="Tipo de Familia" v-model="modelo.familiaTipo"></lookup>
                         <v-text-field label="Calidad de las Relaciones Familiares" v-model="modelo.calidadRelaciones"
@@ -172,6 +175,7 @@
       const parentescos = await lookupService.parentescos()
       const responsabilidades = await lookupService.responsabilidades()
       const familiares = modelo.id === -1 ? [] : await familiaService.familiares(params.id)
+      const estadosCiviles = await lookupService.estadosCiviles()
 
       return {
         familiaTipos,
@@ -179,7 +183,8 @@
         parentescos,
         responsabilidades,
         modelo,
-        familiares
+        familiares,
+        estadosCiviles
       }
     },
 
